@@ -1,0 +1,22 @@
+# depslib dependency file v1.0
+1408551636 source:c:\codeblocksworkspace\pacman\main.c
+	<stdio.h>
+	"allegro_la_salle.h"
+
+1408545609 c:\codeblocksworkspace\pacman\game.h
+	<stdio.h>
+	<stdlib.h>
+	<allegro5/allegro5.h>
+	<allegro5/allegro_primitives.h>
+	<allegro5/allegro_ttf.h>
+	<string.h>
+
+1408549046 source:c:\codeblocksworkspace\pacman\game.c
+
+1408552584 source:c:\codeblocksworkspace\pacman\allegro_la_salle.c
+	"allegro_la_salle.h"
+
+1408551604 c:\codeblocksworkspace\pacman\allegro_la_salle.h
+	<allegro5/allegro.h>
+	<allegro5/allegro_primitives.h>
+
