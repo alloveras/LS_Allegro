@@ -15,10 +15,12 @@
 
 */
 
-
+#include<stdio.h>
 //Includes Allegro5
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_primitives.h>
+#include <allegro5/allegro_font.h>
+#include <allegro5/allegro_ttf.h>
 
 int LS_allegro_init(int nAmplitud,int nAltura,char *sNombreVentana);
 
@@ -29,7 +31,10 @@ void LS_listen_keyboard();
 void LS_allegro_clear_keybuffer();
 
 int LS_isKeyPressed(int nKey);
+
 int LS_clearKey(int nKey);
+
+void LS_allegro_text_printf(float x, float y,int nSize,ALLEGRO_COLOR color,char *sFormat,...);
 
 void LS_allegro_exit();
 

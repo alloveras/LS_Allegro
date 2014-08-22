@@ -3,7 +3,7 @@
 
 int main(){
 
-    int nVertical = 100;
+    int nVertical = 50;
     int nHorizontal = 0;
     int bSortir = 0;
 
@@ -17,13 +17,15 @@ int main(){
                     al_draw_rectangle(nHorizontal,nVertical,nHorizontal+10,nVertical+10,al_map_rgb(255,0,0),1.0);
                     nVertical += 10;
                 }
-                nVertical = 100;
+                nVertical = 50;
                 nHorizontal += 10;
             }
+
             if(LS_isKeyPressed(0) == 1){
                 bSortir = 1;
                 LS_clearKey(0);
             }
+            LS_allegro_text_printf(10,10,30,al_map_rgb(255,255,255),"Hola que ase?");
         }
 
         LS_allegro_exit();

@@ -23,6 +23,8 @@ int LS_allegro_init(int nAmplitud,int nAltura,char *sNombreVentana){
     al_clear_to_color(al_map_rgb(0,0,0));
     al_flip_display();
     LS_allegro_clear_keybuffer();
+    al_init_font_addon();
+    al_init_ttf_addon();
     return 1;
 }
 
@@ -57,6 +59,12 @@ int LS_isKeyPressed(int nKey){
 
 int LS_clearKey(int nKey){
     KEYS[nKey] = 0;
+}
+
+void LS_allegro_text_printf(float x, float y,int nSize,ALLEGRO_COLOR color,char *sFormat,...){
+    ALLEGRO_FONT *font = al_load_ttf_font("C:/CodeBlocksWorkspace/Pacman/font.ttf",nSize,0 );
+    al_draw_text(font,color,x,y,ALLEGRO_ALIGN_LEFT,sFormat);
+    if(font != NULL) al_destroy_font(font);
 }
 
 void LS_allegro_paint(){
