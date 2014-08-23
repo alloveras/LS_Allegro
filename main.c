@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include "allegro_la_salle.h"
+#include "graphics.h"
 
 int main(){
 
@@ -9,10 +10,11 @@ int main(){
 
     if(LS_allegro_init(800,600,"Pacman")){
         while(bSortir == 0){
-            LS_listen_keyboard();
-            LS_allegro_paint();
 
-            while(nHorizontal < 800){
+            //Cridem l'executiu
+            LS_allegro_executiu();
+
+            while(nHorizontal < 600){
                 while(nVertical < 600){
                     al_draw_rectangle(nHorizontal,nVertical,nHorizontal+10,nVertical+10,al_map_rgb(255,0,0),1.0);
                     nVertical += 10;
@@ -21,11 +23,12 @@ int main(){
                 nHorizontal += 10;
             }
 
-            if(LS_isKeyPressed(0) == 1){
+            GRAPHICS_drawLeftMenu();
+
+            if(LS_allegro_key_pressed(0) == 1){
                 bSortir = 1;
-                LS_clearKey(0);
             }
-            LS_allegro_text_printf(10,10,30,al_map_rgb(255,255,255),"Hola que ase?");
+
         }
 
         LS_allegro_exit();

@@ -23,3 +23,29 @@
 	<allegro5/allegro_font.h>
 	<allegro5/allegro_ttf.h>
 
+1408810082 source:/home/alloveras/Documents/La Salle/Colaboracions Departamentals/Programació 1/2014-2015/Pràctica 2 Framework/La Salle Allegro/allegro_la_salle.c
+	"allegro_la_salle.h"
+
+1408809994 /home/alloveras/Documents/La Salle/Colaboracions Departamentals/Programació 1/2014-2015/Pràctica 2 Framework/La Salle Allegro/allegro_la_salle.h
+	<stdarg.h>
+	<stdio.h>
+	<string.h>
+	<stdio.h>
+	<allegro5/allegro.h>
+	<allegro5/allegro_primitives.h>
+	<allegro5/allegro_font.h>
+	<allegro5/allegro_ttf.h>
+
+1408794691 source:/home/alloveras/Documents/La Salle/Colaboracions Departamentals/Programació 1/2014-2015/Pràctica 2 Framework/La Salle Allegro/game.c
+
+1408805752 source:/home/alloveras/Documents/La Salle/Colaboracions Departamentals/Programació 1/2014-2015/Pràctica 2 Framework/La Salle Allegro/main.c
+	<stdio.h>
+	"allegro_la_salle.h"
+	"graphics.h"
+
+1408809971 source:/home/alloveras/Documents/La Salle/Colaboracions Departamentals/Programació 1/2014-2015/Pràctica 2 Framework/La Salle Allegro/graphics.c
+	"graphics.h"
+
+1408809462 /home/alloveras/Documents/La Salle/Colaboracions Departamentals/Programació 1/2014-2015/Pràctica 2 Framework/La Salle Allegro/graphics.h
+	"allegro_la_salle.h"
+
