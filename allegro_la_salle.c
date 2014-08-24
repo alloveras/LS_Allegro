@@ -1,7 +1,7 @@
 #include "allegro_la_salle.h"
 
 //Constants internes del mòdul
-#define MAX_KEYS 20
+#define MAX_KEYS 128
 #define MAX_COLORS 17
 #define MAX_FONTS 4
 
@@ -54,7 +54,7 @@ int LS_allegro_init(int nAmplitud,int nAltura,char *sNombreVentana){
 
     //Fixem els events del teclat perquè siguin encuats a la cua que acabem de crear
 	al_register_event_source(pEventQueue, al_get_keyboard_event_source());
-	al_register_event_source(pEventQueue, al_get_display_event_source(pDisplay));
+	//al_register_event_source(pEventQueue, al_get_display_event_source(pDisplay));
 
     //Inicialitzem els colors primitius
     LS_allegro_init_default_colors();
@@ -98,25 +98,26 @@ void LS_allegro_exit(){
 //Post : Posa a 1 (CERT) el flag corresponent a la tecla premuda a l'array de flags anomenada KEYS.
 void LS_allegro_listen_keyboard(){
     ALLEGRO_EVENT ev;
-    if(al_peek_next_event(pEventQueue,&ev)){
-       if(ev.type == ALLEGRO_EVENT_KEY_DOWN)
-        {
-            switch(ev.keyboard.keycode)
-            {
-                case ALLEGRO_KEY_ESCAPE:
-                    KEYS[0] = 1;
-                    break;
-            }
+    if(al_peek_next_event(pEventQueue,&ev) == 1){
+       if(ev.type == ALLEGRO_EVENT_KEY_DOWN){
+            KEYS[ev.keyboard.keycode - 1] = 1;
             al_drop_next_event(pEventQueue);
         }
+        if(ev.type == ALLEGRO_EVENT_KEY_UP){
+            al_drop_next_event(pEventQueue);
+        }
+        if(ev.type == ALLEGRO_EVENT_KEY_CHAR){
+            al_drop_next_event(pEventQueue);
+        }
+
     }
 }
 
-//Pre : Cap
+//Pre : El valor del paràmetre nKey ha de ser una constant del tipus ALLEGRO_KEY_XXXXXX
 //Post : Retorna 1 (Cert) si s'ha premut la tecla rebuda al paràmetre nKey. En cas contrari, es retornarà 0 (FALS). ATENCIÓ!! LECTURA DESTRUCTIVA!
 int LS_allegro_key_pressed(int nKey){
-    if(KEYS[nKey] == 1){
-        KEYS[nKey] = 0;
+    if(KEYS[nKey - 1] == 1){
+        KEYS[nKey - 1] = 0;
         return 1;
     }
     return 0;

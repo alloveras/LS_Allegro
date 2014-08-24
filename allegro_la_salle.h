@@ -56,7 +56,7 @@
 //Post: Retorna 1 (CERT) si s'ha pogut inicialitzar correctament el Framework d'Allegro5. En cas contrari es retornarà 0 (FALS).
 int LS_allegro_init(int nAmplitud,int nAltura,char *sNombreVentana);
 
-//Pre : Cap
+//Pre : El valor del paràmetre nKey ha de ser una constant del tipus ALLEGRO_KEY_XXXXXX
 //Post : Retorna 1 (Cert) si s'ha premut la tecla rebuda al paràmetre nKey. En cas contrari, es retornarà 0 (FALS). ATENCIÓ!! LECTURA DESTRUCTIVA!
 int LS_allegro_key_pressed(int nKey);
 

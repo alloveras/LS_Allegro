@@ -25,7 +25,7 @@ int main(){
 
             GRAPHICS_drawLeftMenu();
 
-            if(LS_allegro_key_pressed(0) == 1){
+            if(LS_allegro_key_pressed(ALLEGRO_KEY_ESCAPE) == 1){
                 bSortir = 1;
             }
 
