@@ -1,26 +1,25 @@
 #include "allegro_la_salle.h"
 
-//Constants internes del mÚdul
+//Constants internes del m√≤dul
 #define MAX_KEYS 128
 #define MAX_COLORS 17
 #define MAX_FONTS 4
 
-//Variables internes del mÚdul
-static ALLEGRO_DISPLAY *pDisplay = NULL;                    //Variable que  emmagatzema els detalls de la finestra gr‡fica
-static ALLEGRO_EVENT_QUEUE *pEventQueue = NULL;             //Variable que emmagatzema la cua d'events succeÔts esperant a ser tractats
+//Variables internes del m√≤dul
+static ALLEGRO_DISPLAY *pDisplay = NULL;                    //Variable que  emmagatzema els detalls de la finestra gr√†fica
+static ALLEGRO_EVENT_QUEUE *pEventQueue = NULL;             //Variable que emmagatzema la cua d'events succe√Øts esperant a ser tractats
 static int KEYS[MAX_KEYS];                                  //Variable que emmagatzema els flags de les tecles del teclat que han estat premudes
-static char sFontPath[500];                                 //Variable que emmagatzema la ruta absoluta cap al fitxer de definiciÛ de la font per defecte
+static char sFontPath[500];                                 //Variable que emmagatzema la ruta absoluta cap al fitxer de definici√≥ de la font per defecte
 static ALLEGRO_COLOR aColors[MAX_COLORS];                   //Variable que  emmagatzema les variables del tipus ALLEGRO_COLOR dels colors predeterminats
-static ALLEGRO_FONT *aFonts[MAX_FONTS];                     //Variable que emmagatzema la informaciÛ de la font predeterminada del framework.
-
+static ALLEGRO_FONT *aFonts[MAX_FONTS];                     //Variable que emmagatzema la informaci√≥ de la font predeterminada del framework.
 
 //------------ Prototipus Privades ------- //
 void LS_allegro_init_default_colors();
 void LS_allegro_paint();
-void LS_allegro_listen_keyboard();
+void LS_allegro_process_events();
 
 //Pre : Cap
-//Post: Retorna 1 (CERT) si s'ha pogut inicialitzar correctament el Framework d'Allegro5. En cas contrari es retornar‡ 0 (FALS).
+//Post: Retorna 1 (CERT) si s'ha pogut inicialitzar correctament el Framework d'Allegro5. En cas contrari es retornar√† 0 (FALS).
 int LS_allegro_init(int nAmplitud,int nAltura,char *sNombreVentana){
     int nCounter = 0;
 
@@ -29,33 +28,44 @@ int LS_allegro_init(int nAmplitud,int nAltura,char *sNombreVentana){
     strcat(sFontPath,"/font.ttf");
 
     //Provem d'inicialitzar la llibreria Allegro 5
-    if(!al_init()) return 0;
+    if(!al_init()){
+		printf("LS_Allegro_Error: No s'ha pogut inicialitzar la llibreria Allegro 5! Comprova que tot esta correctament instal¬∑lat al teu ordinador.\n");
+		getchar();
+		return 0;
+	} 
 
-    //Intentem inicialitzar una finestra gr‡fica de les mides rebudes
+    //Intentem inicialitzar una finestra gr√†fica de les mides rebudes
     pDisplay = al_create_display(nAmplitud,nAltura);
 
-    //Posem el nom rebut a la finestra. Si no es reb cap nom, aquest dependr‡ del sistema operatiu
+    //Posem el nom rebut a la finestra. Si no es reb cap nom, aquest dependr√† del sistema operatiu
     if(sNombreVentana != NULL) al_set_window_title(pDisplay,sNombreVentana);
 
-    //Comprovem que s'hagi pogut crear la finestra gr‡fica
-    if(!pDisplay) return 0;
+    //Comprovem que s'hagi pogut crear la finestra gr√†fica
+    if(!pDisplay){
+		printf("LS_Allegro_Error: No s'ha pogut crear la finestra gr√†fica d'Allegro 5! Hi ha hagut alg√∫n problema de comuncicaci√≥ amb el hardware de la gr√†fica.\n");
+		getchar();
+		return 0;
+	}
 
-    //Inicialitzem els addons necess‡ris d'Allegro5
+    //Inicialitzem els addons necess√†ris d'Allegro5
     al_init_primitives_addon();     //Dibuix de figures simples (Rectangles, Quadrats, Triangles...)
     al_install_keyboard();          //Driver de teclat
     al_init_font_addon();           //Gestor de fonts de text
     al_init_ttf_addon();            //Gestor de fitxers .ttf per les fonts de text
 
-    //Creem una cua d'esdeveniments (necess‡ria pel listener del teclat)
+    //Creem una cua d'esdeveniments (necess√†ria pel listener del teclat)
     pEventQueue = al_create_event_queue();
 
     //Comprovem si la cua d'esdeveniments s'ha creat correctament
-    if(!pEventQueue) return 0;
+    if(!pEventQueue){
+		printf("LS_Allegro_Error: Error durant la creaci√≥ de la cua d'esdeveniments!\n");
+		getchar();
+		return 0;
+	} 
 
-    //Fixem els events del teclat perquË siguin encuats a la cua que acabem de crear
-	al_register_event_source(pEventQueue, al_get_keyboard_event_source());
-	//al_register_event_source(pEventQueue, al_get_display_event_source(pDisplay));
 
+    //Fixem els events del teclat perqu√® siguin encuats a la cua que acabem de crear
+	al_register_event_source(pEventQueue, al_get_keyboard_event_source());	
     //Inicialitzem els colors primitius
     LS_allegro_init_default_colors();
 
@@ -67,24 +77,28 @@ int LS_allegro_init(int nAmplitud,int nAltura,char *sNombreVentana){
 
     //Comprovem si alguna font s'ha carregat malament
     for(nCounter = 0 ; nCounter < MAX_FONTS ; nCounter++){
-        if(aFonts[nCounter] == NULL) return 0;
+        if(aFonts[nCounter] == NULL){
+			printf("LS_Allegro_Error: No s'ha pogut carregar la font predeterminada. Comprova que el fitxer de la font estigui col¬∑locat al directori -> %s.\n",sFontPath);
+			getchar();
+			return 0;
+		}
     }
 
-	//Netegem la finestra gr‡fica posant el color negre de color de fons
+	//Netegem la finestra gr√†fica posant el color negre de color de fons
     al_clear_to_color(LS_allegro_getColor(BLACK));
-
-    //Pintem el buffer gr‡fic per visualitzar els canvis a la finestra gr‡fica
-    al_flip_display();
+	
+	//Pintem el buffer que tenim en mem√≤ria
+	al_flip_display();
 
     //Netegem el buffer de tecles premudes
     for(nCounter = 0 ; nCounter < MAX_KEYS ; nCounter++) KEYS[nCounter] = 0;
 
-    //Si arribem aquÌ, tot ha anat bÈ, per tant retornem 1.
+    //Si arribem aqu√≠, tot ha anat b√©, per tant retornem 1.
     return 1;
 }
 
-//Pre : El framework d'Allegro 5 ha d'estar inicialitzat prËviament. (LS_allegro_init() ha d'haver retornat 1)
-//Post : Allibera la memÚria que s'havia reservat per a les variables necess‡ries per fer funcionar Allegro5.
+//Pre : El framework d'Allegro 5 ha d'estar inicialitzat pr√®viament. (LS_allegro_init() ha d'haver retornat 1)
+//Post : Allibera la mem√≤ria que s'havia reservat per a les variables necess√†ries per fer funcionar Allegro5.
 void LS_allegro_exit(){
     int nCounter = 0;
     al_destroy_display(pDisplay);
@@ -94,27 +108,22 @@ void LS_allegro_exit(){
     }
 }
 
-//Pre : El framework d'Allegro 5 ha d'estar inicialitzat prËviament. (LS_allegro_init() ha d'haver retornat 1)
+//Pre : El framework d'Allegro 5 ha d'estar inicialitzat pr√®viament. (LS_allegro_init() ha d'haver retornat 1)
 //Post : Posa a 1 (CERT) el flag corresponent a la tecla premuda a l'array de flags anomenada KEYS.
-void LS_allegro_listen_keyboard(){
+void LS_allegro_process_events(){
     ALLEGRO_EVENT ev;
     if(al_peek_next_event(pEventQueue,&ev) == 1){
-       if(ev.type == ALLEGRO_EVENT_KEY_DOWN){
+		if(ev.type == ALLEGRO_EVENT_KEY_DOWN){	//Event de Key_Down	
             KEYS[ev.keyboard.keycode - 1] = 1;
             al_drop_next_event(pEventQueue);
-        }
-        if(ev.type == ALLEGRO_EVENT_KEY_UP){
-            al_drop_next_event(pEventQueue);
-        }
-        if(ev.type == ALLEGRO_EVENT_KEY_CHAR){
-            al_drop_next_event(pEventQueue);
-        }
-
+        }else{	//Altres Events que no necessiten tractament
+			al_drop_next_event(pEventQueue);
+		}
     }
 }
 
-//Pre : El valor del par‡metre nKey ha de ser una constant del tipus ALLEGRO_KEY_XXXXXX
-//Post : Retorna 1 (Cert) si s'ha premut la tecla rebuda al par‡metre nKey. En cas contrari, es retornar‡ 0 (FALS). ATENCI”!! LECTURA DESTRUCTIVA!
+//Pre : El valor del par√†metre nKey ha de ser una constant del tipus ALLEGRO_KEY_XXXXXX
+//Post : Retorna 1 (Cert) si s'ha premut la tecla rebuda al par√†metre nKey. En cas contrari, es retornar√† 0 (FALS). ATENCI√ì!! LECTURA DESTRUCTIVA!
 int LS_allegro_key_pressed(int nKey){
     if(KEYS[nKey - 1] == 1){
         KEYS[nKey - 1] = 0;
@@ -124,12 +133,12 @@ int LS_allegro_key_pressed(int nKey){
 }
 
 //Pre : El valor de nSize ha d'estar dins l'interval [0,MAX_FONTS)
-//Post : Retorna una variable del tipus ALLEGRO_FONT * per poder usar la funciÛ al_draw_textf mÈs facilment.
+//Post : Retorna una variable del tipus ALLEGRO_FONT * per poder usar la funci√≥ al_draw_textf m√©s facilment.
 ALLEGRO_FONT * LS_allegro_getFont(int nSize){
     return aFonts[nSize];
 }
 
-//Pre : El valor de nColor ha d'estar entre 0 i 16 ambdÛs inclosos.
+//Pre : El valor de nColor ha d'estar entre 0 i 16 ambd√≥s inclosos.
 //Post : Retorna una variable del tipus ALLEGRO_COLOR corresponent al color demanat.
 ALLEGRO_COLOR LS_allegro_getColor(int nColor){
     ALLEGRO_COLOR color_return;
@@ -164,15 +173,15 @@ void LS_allegro_init_default_colors(){
 
 
 //Pre : Cap
-//Post : Pinta el contingut del buffer temporal a la finestra gr‡fica.
+//Post : Pinta el contingut del buffer temporal a la finestra gr√†fica.
 void LS_allegro_paint(){
-    al_flip_display();
+	al_flip_display();
 }
 
 //Pre: Cap
-//Post: Executa les tasques necess‡ries perquË Allegro funcioni correctament. Aquest procediment s'ha de cridar sempre dins del bucle infinit
-//del joc que estiguem implementant, ja que sinÛ, no podrem escoltar el teclat ni veurem els canvis a la finestra gr‡fica.
+//Post: Executa les tasques necess√†ries perqu√® Allegro funcioni correctament. Aquest procediment s'ha de cridar sempre dins del bucle infinit
+//del joc que estiguem implementant, ja que sin√≥, no podrem escoltar el teclat ni veurem els canvis a la finestra gr√†fica.
 void LS_allegro_executiu(){
-    LS_allegro_paint();
-    LS_allegro_listen_keyboard();
+    LS_allegro_process_events();
+	LS_allegro_paint();
 }
