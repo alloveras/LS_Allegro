@@ -185,3 +185,23 @@ void LS_allegro_executiu(){
     LS_allegro_process_events();
 	LS_allegro_paint();
 }
+
+//Pre : Cap	
+//Post: Neteja els buffers del teclat perquè no hi quedi cap tecla emmagatzemada.
+void LS_allegro_console_fflush(){
+	fflush(stdout);
+	stdin->_IO_read_ptr = stdin->_IO_read_base;
+	stdin->_IO_read_end = stdin->_IO_read_base;
+	fflush(stdin);
+}
+
+//Pre : Cap
+//Post: Neteja la pantalla de la consola
+void LS_allegro_console_clear_screen(){
+	#if defined(__linux__) || (defined(__APPLE__) && defined(__MACH__))
+		system("clear");	
+	#endif
+	#if defined(_WIN64) || defined(_WIN32)
+		system("cls");
+	#endif
+}
