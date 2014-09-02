@@ -1,4 +1,4 @@
-#include "allegro_la_salle.h"
+#include "LS_allegro.h"
 
 //Constants internes del mòdul
 #define MAX_KEYS 128
