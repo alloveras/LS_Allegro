@@ -189,10 +189,16 @@ void LS_allegro_executiu(){
 //Pre : Cap	
 //Post: Neteja els buffers del teclat perquè no hi quedi cap tecla emmagatzemada.
 void LS_allegro_console_fflush(){
-	fflush(stdout);
-	stdin->_IO_read_ptr = stdin->_IO_read_base;
-	stdin->_IO_read_end = stdin->_IO_read_base;
-	fflush(stdin);
+	#if defined(__linux__) || (defined(__APPLE__) && defined(__MACH__))
+		fflush(stdout);
+		stdin->_IO_read_ptr = stdin->_IO_read_base;
+		stdin->_IO_read_end = stdin->_IO_read_base;
+		fflush(stdin);
+	#endif
+	#if defined(_WIN64) || defined(_WIN32)
+		fflush(stdin);
+		fflush(stdout);
+	#endif	
 }
 
 //Pre : Cap
