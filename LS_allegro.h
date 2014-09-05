@@ -7,7 +7,7 @@
     com l'escoltat del teclat, la inicialització o el pintat de la pantalla.
 
     Autor : Albert Lloveras Carbonell
-    Data Última Revisió : 23/08/2014
+    Data Última Revisió : 05/09/2014
     CopyRight : Distribució lliure sense cap limitació
 
 */
@@ -20,6 +20,11 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdio.h>
+
+//Operating System Depending Includes
+#if defined(__linux__)
+	#include <pthread.h>
+#endif
 
 //Includes Allegro5include
 #include <allegro5/allegro.h>
@@ -51,7 +56,6 @@
 #define LARGE 2
 #define EXTRA_LARGE 3
 
-
 //Pre : Cap
 //Post: Retorna 1 (CERT) si s'ha pogut inicialitzar correctament el Framework d'Allegro5. En cas contrari es retornarà 0 (FALS).
 int LS_allegro_init(int nAmplitud,int nAltura,char *sNombreVentana);
@@ -60,18 +64,13 @@ int LS_allegro_init(int nAmplitud,int nAltura,char *sNombreVentana);
 //Post : Retorna 1 (Cert) si s'ha premut la tecla rebuda al paràmetre nKey. En cas contrari, es retornarà 0 (FALS). ATENCIÓ!! LECTURA DESTRUCTIVA!
 int LS_allegro_key_pressed(int nKey);
 
-//Pre: Cap
-//Post: Executa les tasques necessàries perquè Allegro funcioni correctament. Aquest procediment s'ha de cridar sempre dins del bucle infinit
-//del joc que estiguem implementant, ja que sinó, no podrem escoltar el teclat ni veurem els canvis a la finestra gràfica.
-void LS_allegro_executiu();
-
 //Pre : El valor de nColor ha d'estar entre 0 i 16 ambdós inclosos.
 //Post : Retorna una variable del tipus ALLEGRO_COLOR corresponent al color demanat.
-ALLEGRO_COLOR LS_allegro_getColor(int nColor);
+ALLEGRO_COLOR LS_allegro_get_color(int nColor);
 
-//Pre : //Pre : El valor de nSize ha d'estar dins l'interval [0,MAX_FONTS)
+//Pre : El valor de nSize ha d'estar dins l'interval [0,MAX_FONTS)
 //Post : Retorna una variable del tipus ALLEGRO_FONT * per poder usar la funció al_draw_textf més facilment.
-ALLEGRO_FONT* LS_allegro_getFont(int nSize);
+ALLEGRO_FONT* LS_allegro_get_font(int nSize);
 
 //Pre : El framework d'Allegro 5 ha d'estar inicialitzat prèviament. (LS_allegro_init() ha d'haver retornat 1)
 //Post : Allibera la memòria que s'havia reservat per a les variables necessàries per fer funcionar Allegro5.
