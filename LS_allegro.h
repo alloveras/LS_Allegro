@@ -76,6 +76,14 @@ ALLEGRO_FONT* LS_allegro_get_font(int nSize);
 //Post : Allibera la memòria que s'havia reservat per a les variables necessàries per fer funcionar Allegro5.
 void LS_allegro_exit();
 
+//Pre : Cap
+//Post : Neteja el que hi hagi pintat a la pantalla i pinta tot el que s'hi ha anat dibuixant abans de cridar la funcio
+void LS_allegro_clear_and_paint(ALLEGRO_COLOR color);
+
+//Pre : Cap
+//Post : Pinta tot el que s'hagi estat dibuixant prèviament a la pantalla
+void LS_allegro_paint();
+
 //Pre : Cap	
 //Post: Neteja els buffers del teclat perquè no hi quedi cap tecla emmagatzemada.
 void LS_allegro_console_fflush();

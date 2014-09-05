@@ -12,8 +12,6 @@ typedef struct{
 #define MAX_FONTS 4
 
 //Variables internes del mòdul
-static LS_Allegro info;										//Variable amb informació important del mòdul
-static ALLEGRO_BITMAP *pBuffer = NULL;						//Buffer on es pinta des del thread principal
 static ALLEGRO_DISPLAY *pDisplay = NULL;                    //Variable que  emmagatzema els detalls de la finestra gràfica
 static ALLEGRO_EVENT_QUEUE *pEventQueue = NULL;             //Variable que emmagatzema la cua d'events succeïts esperant a ser tractats
 static int KEYS[MAX_KEYS];                                  //Variable que emmagatzema els flags de les tecles del teclat que han estat premudes
@@ -34,10 +32,6 @@ static void *LS_allegro_worker(ALLEGRO_THREAD *thr, void *arg);
 int LS_allegro_init(int nAmplitud,int nAltura,char *sNombreVentana){
     
 	int nCounter = 0;
-
-	info.nWidht = nAmplitud;
-	info.nHeight = nAltura;
-	info.sWindowName = sNombreVentana;
 	
 	//Provem d'inicialitzar la llibreria Allegro 5
     if(!al_init()){
@@ -45,19 +39,23 @@ int LS_allegro_init(int nAmplitud,int nAltura,char *sNombreVentana){
 		getchar();
 		return 0;
 	} 
+		
+	//Intentem inicialitzar una finestra gràfica de les mides rebudes
+    pDisplay = al_create_display(nAmplitud,nAltura);
 	
-	//Intentem inicialitzar el worker
-	pThread = al_create_thread(LS_allegro_worker,&info);
-	if(pThread != NULL){
-		al_start_thread(pThread);
-	}else{
+	//Comprovem que s'hagi pogut crear la finestra gràfica
+    if(!pDisplay){
+		printf("LS_Allegro_Error: No s'ha pogut crear la finestra gràfica d'Allegro 5! Hi ha hagut algún problema de comuncicació amb el hardware de la gràfica.\n");
+		getchar();
 		return 0;
 	}
+	
+	//Posem el nom rebut a la finestra. Si no es reb cap nom, aquest dependrà del sistema operatiu
+    if(sNombreVentana != NULL) al_set_window_title(pDisplay,sNombreVentana);
 
     //Obtenim la ruta del fitxer de la font de text
     getcwd(sFontPath, sizeof(sFontPath));
     strcat(sFontPath,"/font.ttf");
-
 
     //Inicialitzem els addons necessàris d'Allegro5
     al_init_primitives_addon();     //Dibuix de figures simples (Rectangles, Quadrats, Triangles...)
@@ -98,11 +96,20 @@ int LS_allegro_init(int nAmplitud,int nAltura,char *sNombreVentana){
 	
     //Netegem el buffer de tecles premudes
     for(nCounter = 0 ; nCounter < MAX_KEYS ; nCounter++) KEYS[nCounter] = 0;
-
-	//Creem el buffer de respaldo
-	pBuffer = al_create_bitmap(info.nWidht,info.nHeight);
 	
-	al_set_target_bitmap(pBuffer);
+	//Netegem la pantalla i la posem en negre
+	al_clear_to_color(LS_allegro_get_color(BLACK));
+	
+	//Intercanviem buffers
+	al_flip_display();
+	
+	//Intentem inicialitzar el worker
+	pThread = al_create_thread(LS_allegro_worker,NULL);
+	if(pThread != NULL){
+		al_start_thread(pThread);
+	}else{
+		return 0;
+	}
 	
 	return 1;
 }
@@ -124,6 +131,8 @@ void LS_allegro_exit(){
 	
 	al_flush_event_queue(pEventQueue);
     al_destroy_event_queue(pEventQueue);
+	al_destroy_display(pDisplay);
+	pDisplay  = NULL;
 	pEventQueue = NULL;
 	
     //Netegem el buffer de tecles premudes
@@ -182,6 +191,15 @@ void LS_allegro_console_clear_screen(){
 	#endif
 }
 
+void LS_allegro_clear_and_paint(ALLEGRO_COLOR color){
+	al_flip_display();
+	al_clear_to_color(color);
+}
+
+void LS_allegro_paint(){
+	al_flip_display();
+}
+
 //-------------------------------------------------- PRIVADES -------------------------------------//
 
 //Pre : El framework d'Allegro 5 ha d'estar inicialitzat prèviament. (LS_allegro_init() ha d'haver retornat 1)
@@ -221,38 +239,9 @@ static void LS_allegro_init_default_colors(){
 
 static void *LS_allegro_worker(ALLEGRO_THREAD *thr, void *arg){
 	
-	//Intentem inicialitzar una finestra gràfica de les mides rebudes
-    pDisplay = al_create_display(info.nWidht,info.nHeight);
-	
-	//Comprovem que s'hagi pogut crear la finestra gràfica
-    if(!pDisplay){
-		printf("LS_Allegro_Error: No s'ha pogut crear la finestra gràfica d'Allegro 5! Hi ha hagut algún problema de comuncicació amb el hardware de la gràfica.\n");
-		getchar();
-		return NULL;
-	}
-	
-	al_clear_to_color(LS_allegro_get_color(BLACK));
-	
-	//Posem el nom rebut a la finestra. Si no es reb cap nom, aquest dependrà del sistema operatiu
-    if(info.sWindowName != NULL) al_set_window_title(pDisplay,info.sWindowName);
-	
 	while(!al_get_thread_should_stop(thr)){
 		LS_allegro_process_events();
-		
-		ALLEGRO_LOCKED_REGION * pLock = al_lock_bitmap(pBuffer,ALLEGRO_LOCK_READWRITE,0);
-		if(pLock != NULL) {
-			al_draw_bitmap(pBuffer,0,0,0);
-			al_set_target_bitmap(pBuffer);
-			al_clear_to_color(LS_allegro_get_color(BLACK));
-			al_set_target_bitmap(al_get_backbuffer(pDisplay));
-			al_unlock_bitmap(pBuffer);
-			al_flip_display();
-		}
-
 	}
-	
-	al_destroy_display(pDisplay);
-	pDisplay  = NULL;
 	
 	return NULL;
 }
