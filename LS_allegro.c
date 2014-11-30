@@ -19,6 +19,7 @@ static char sFontPath[500];                                 //Variable que emmag
 static ALLEGRO_COLOR aColors[MAX_COLORS];                   //Variable que 	 emmagatzema les variables del tipus ALLEGRO_COLOR dels colors predeterminats
 static ALLEGRO_FONT *aFonts[MAX_FONTS];                     //Variable que emmagatzema la informació de la font predeterminada del framework.
 static ALLEGRO_THREAD *pThread = NULL;						//Variable que emmagatzema el thread que fa de worker
+static ALLEGRO_MUTEX *pMutex = NULL;						//Variable que ens permetrà fer el mutex
 
 //------------ Prototipus Privades ------- //
 static void LS_allegro_init_default_colors();
@@ -103,6 +104,9 @@ int LS_allegro_init(int nAmplitud,int nAltura,char *sNombreVentana){
 	//Intercanviem buffers
 	al_flip_display();
 	
+	//Intentem crear el semàfor per al thread
+	pMutex = al_create_mutex();
+	
 	//Intentem inicialitzar el worker
 	pThread = al_create_thread(LS_allegro_worker,NULL);
 	if(pThread != NULL){
@@ -119,10 +123,17 @@ int LS_allegro_init(int nAmplitud,int nAltura,char *sNombreVentana){
 void LS_allegro_exit(){
 	int nCounter = 0;
 	
+	//Esperem a que finalitzi el thread
+	al_join_thread(pThread,NULL);
+	
+	//Alliberem memòria
 	if(pThread != NULL){
 		al_destroy_thread(pThread);
 		pThread = NULL;
 	}
+	
+	//Alliberem memòria del mutex
+	al_destroy_mutex(pMutex);
 	
 	 for(nCounter = 0 ; nCounter < MAX_FONTS ; nCounter++){
         al_destroy_font(aFonts[nCounter]);
@@ -142,10 +153,13 @@ void LS_allegro_exit(){
 //Pre : El valor del paràmetre nKey ha de ser una constant del tipus ALLEGRO_KEY_XXXXXX
 //Post : Retorna 1 (Cert) si s'ha premut la tecla rebuda al paràmetre nKey. En cas contrari, es retornarà 0 (FALS). ATENCIÓ!! LECTURA DESTRUCTIVA!
 int LS_allegro_key_pressed(int nKey){
+	al_lock_mutex(pMutex);
     if(KEYS[nKey - 1] == 1){
         KEYS[nKey - 1] = 0;
+		al_unlock_mutex(pMutex);
         return 1;
     }
+	al_unlock_mutex(pMutex);
     return 0;
 }
 
@@ -206,12 +220,15 @@ void LS_allegro_paint(){
 //Post : Posa a 1 (CERT) el flag corresponent a la tecla premuda a l'array de flags anomenada KEYS.
 static void LS_allegro_process_events(){
     ALLEGRO_EVENT ev;
+	
+	al_lock_mutex(pMutex);
     if(al_peek_next_event(pEventQueue,&ev) == 1){
 		if(ev.type == ALLEGRO_EVENT_KEY_DOWN){	//Event de Key_Down		
             KEYS[ev.keyboard.keycode - 1] = 1;
         }
 		al_drop_next_event(pEventQueue);
     }
+	al_unlock_mutex(pMutex);
 }
 
 //Pre : Cap
