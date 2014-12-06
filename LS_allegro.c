@@ -182,11 +182,15 @@ ALLEGRO_COLOR LS_allegro_get_color(int nColor){
 //Pre : Cap	
 //Post: Neteja els buffers del teclat perquè no hi quedi cap tecla emmagatzemada.
 void LS_allegro_console_fflush(){
-	#if defined(__linux__) || (defined(__APPLE__) && defined(__MACH__))
+	#if defined(__linux__) 
 		fflush(stdout);
 		stdin->_IO_read_ptr = stdin->_IO_read_base;
 		stdin->_IO_read_end = stdin->_IO_read_base;
 		fflush(stdin);
+	#endif
+	#if (defined(__APPLE__) && defined(__MACH__))
+		fpurge(stdin);
+		fpurge(stdout);
 	#endif
 	#if defined(_WIN64) || defined(_WIN32)
 		fflush(stdin);
