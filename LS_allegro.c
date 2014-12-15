@@ -82,10 +82,10 @@ int LS_allegro_init(int nAmplitud,int nAltura,char *sNombreVentana){
     LS_allegro_init_default_colors();
 
     //Carreguem la font de text
-    aFonts[SMALL] = al_load_ttf_font(sFontPath,4,0);
-    aFonts[NORMAL] = al_load_ttf_font(sFontPath,8,0);
-    aFonts[LARGE] = al_load_ttf_font(sFontPath,32,0);
-    aFonts[EXTRA_LARGE] = al_load_ttf_font(sFontPath,64,0);
+    aFonts[SMALL] = al_load_ttf_font(sFontPath,8,0);
+    aFonts[NORMAL] = al_load_ttf_font(sFontPath,12,0);
+    aFonts[LARGE] = al_load_ttf_font(sFontPath,22,0);
+    aFonts[EXTRA_LARGE] = al_load_ttf_font(sFontPath,32,0);
 
     //Comprovem si alguna font s'ha carregat malament
     for(nCounter = 0 ; nCounter < MAX_FONTS ; nCounter++){
