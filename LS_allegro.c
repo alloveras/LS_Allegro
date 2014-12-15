@@ -63,6 +63,7 @@ int LS_allegro_init(int nAmplitud,int nAltura,char *sNombreVentana){
     al_install_keyboard();          //Driver de teclat
     al_init_font_addon();           //Gestor de fonts de text
     al_init_ttf_addon();            //Gestor de fitxers .ttf per les fonts de text
+	al_init_image_addon();			//Carrega addons d'imatges (Bitmaps i demés)
 
     //Creem una cua d'esdeveniments (necessària pel listener del teclat)
     pEventQueue = al_create_event_queue();
