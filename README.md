@@ -24,19 +24,19 @@ The project is cross-platform so it can be used under Windows, MacOS and Linux p
   
   3.Add the following flags to the compiler linker
   
-    - Linux / MacOS
+  - Linux / MacOS
   
-    > allegro
-    > allegro_main
-    > allegro_primitives
-    > allegro_color
-    > allegro_ttf
-    > allegro_image
-    > allegro_acodec
-    > allegro_audio
-    > allegro_memfile
+  > allegro
+  > allegro_main
+  > allegro_primitives
+  > allegro_color
+  > allegro_ttf
+  > allegro_image
+  > allegro_acodec
+  > allegro_audio
+  > allegro_memfile
 
-    - Windows
+  - Windows
     
-    >liballegro-5.0.10-monolith-mt-debug.a
+  >liballegro-5.0.10-monolith-mt-debug.a
 
