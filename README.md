@@ -20,7 +20,7 @@ The project is cross-platform so it can be used under Windows, MacOS and Linux p
   
   >git clone https://github.com/alloveras/LS_Allegro.git
   
-  2. Copy the LS_allegro.c and LS_allegro.h files to your videogame project.
+  2. Copy the "LS_allegro.c" and "LS_allegro.h" files to your videogame project.
   
   3.Add the following flags to the compiler linker
   
