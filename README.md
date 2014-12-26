@@ -17,4 +17,4 @@ How to use
 ===========================
 The project is cross-platform so it can be used under Windows, MacOS and Linux platforms. To work with this interface you should follow those steps:
   -Clone the repository
-  >https://github.com/alloveras/LS_Allegro.git
+  >git clone https://github.com/alloveras/LS_Allegro.git
