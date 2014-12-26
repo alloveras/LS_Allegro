@@ -16,5 +16,20 @@ students to learn programming skills.
 How to use
 ===========================
 The project is cross-platform so it can be used under Windows, MacOS and Linux platforms. To work with this interface you should follow those steps:
-  -Clone the repository
+  1.Clone the repository
   >git clone https://github.com/alloveras/LS_Allegro.git
+  2. Copy the LS_allegro.c and LS_allegro.h files to your videogame project.
+  3.Add the following flags to the compiler linker
+    - Linux / MacOS
+    > allegro
+    > allegro_main
+    > allegro_primitives
+    > allegro_color
+    > allegro_ttf
+    > allegro_image
+    > allegro_acodec
+    > allegro_audio
+    > allegro_memfile
+    - Windows
+    >liballegro-5.0.10-monolith-mt-debug.a
+
