@@ -22,4 +22,22 @@ Clone the repository
 >git clone https://github.com/alloveras/LS_Allegro.git
 
 Copy the LS_allegro.c and LS_allegro.h files to your videogame project.
+ 
+Add the following flags to the compiler linker
+
+##Linux / MacOS
+  
+  > allegro
+  > allegro_main
+  > allegro_primitives
+  > allegro_color
+  > allegro_ttf
+  > allegro_image
+  > allegro_acodec
+  > allegro_audio
+  > allegro_memfile
+
+##Windows
+    
+  >liballegro-5.0.10-monolith-mt-debug.a
 
