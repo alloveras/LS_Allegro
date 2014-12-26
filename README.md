@@ -18,6 +18,8 @@ How to use
 The project is cross-platform so it can be used under Windows, MacOS and Linux platforms. To work with this interface you should follow those steps:
 
 1. Clone the repository
+
 >git clone https://github.com/alloveras/LS_Allegro.git
+
 2. Copy the LS_allegro.c and LS_allegro.h files to your videogame project.
 
