@@ -15,7 +15,7 @@ students to learn programming skills.
 
 How to use
 ===========================
-The project is cross-platform so it can be used under Windows, MacOS and Linux platforms. To work with this interface you should follow those steps:
+The project is cross-platform so it can be used under Windows, MacOS and Linux platforms. To work with this interface you should have installled Allegro 5 previously on your computer and follow those steps below:
 
 Clone the repository
 
