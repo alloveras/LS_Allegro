@@ -3,283 +3,471 @@
 \usepackage[utf8]{inputenc}
 \usepackage{hyperref}
 \usepackage{graphicx}
+\usepackage[catalan]{babel}
+\usepackage[left=3cm,right=2.5cm,top=2.5cm,bottom=2.5cm]{geometry}
+
+\geometry{left=3cm,right=2.5cm,top=2cm,bottom=2.5cm}
+
+% PEr fer el index mes petit
+\AtBeginDocument{
+  \addtocontents{toc}{\tiny}
+  \addtocontents{lof}{\tiny}
+}
+\hypersetup{
+    colorlinks=false,
+    pdfborder={0 0 0},
+}
+
+\usepackage{xpatch}
+\makeatletter
+\xpatchcmd{\tableofcontents}{\contentsname \@mkboth}{\small\contentsname \@mkboth}{}{}
+\xpatchcmd{\listoffigures}{\chapter *{\listfigurename }}{\chapter *{\small\listfigurename }}{}{}
+\makeatother
 
 \renewcommand{\contentsname}{Índex}
 
+
 \title{Documentació LS\_Allegro}
 \author{Departament d'Informàtica (La Salle Barcelona)}
-\date{Darrera Revisió : 04/09/2014}
+\date{Darrera Revisió : 27/12/2014}
 
 \begin{document}
 
-\maketitle
+\begin{titlepage}
+\clearpage\maketitle
+\thispagestyle{empty}
+\newpage
+\clearpage\tableofcontents
+\thispagestyle{empty}
+\end{titlepage}
 
-\tableofcontents
 
-\pagebreak
+\newpage
 
 
 \section{Introducció}
-El mòdul LS\_Allegro es va crear amb la finalitat de simplificar l'ús de la llibreria Allegro 5 als alumnes de Programació I. En la migració entre la versió 4.4 i la versió 5 de la llibreria, es van dur a terme molts canvis en aquesta comportant que es convertís en una eina molt més potent però alhora més complexe d'utilitzar.\\
-Per aquesta raó, es va decidir implementar un petit mòdul que funciones d'adaptador entre el codi dels alumnes i la pròpia llibreria. Aquest mòdul hauria de permetre que l'alumne pugui centrar-se en el desenvolupament de la pràctica sense haver-se de preocupar de realitzar les configuracions i crides a funcions natives de la llibreria, perquè l'adaptador ja se n'ocupa automàticament.
+El mòdul LS\_Allegro es va crear amb la finalitat de simplificar l'ús de la llibreria Allegro 5 als alumnes de Programació I. La necessitat d'aquesta simplificació va sorgir quan, en la migració entre la versió 4.4 i la versió 5, els desenvolupadors de la llibreria van dur a terme molts canvis per tal de convertir-la en una eina més potent per al desenvolupament de videojocs. No obstant això, el guany en potencia de desenvolupament va anar en detriment de la senzillesa d'ús fent que, a partir de la versió 5, les operacions bàsiques requerissin de coneixements més avançats de programació que en versions anteriors.\\
 
+\noindent La idea de LS\_Allegro és ser un mòdul que funcioni d'adaptador entre el codi dels alumnes i la llibreria Allegro 5. D'aquesta manera, aquest seguit de crides més complexes que necessita Allegro queden amagades dins del mòdul i l'alumne se'n pot abstraure tot centrant-se en el desenvolupament de la pràctica.
 
 \section{Constants}
-En aquesta secció s'explicaran les diverses constants que estan definides dins del mòdul LS\_Allegro, per tal de que se'n pugui fer un ús a consciència tenint en compte el que signifiquen i representen.
+En aquesta secció s'expliquen les diverses constants que estan definides dins del mòdul LS\_Allegro per tal de que es pugui entendre el que signifiquen i saber quan es poden utilitzar.
 
 \subsection{Constants de Colors}
-Aquest mòdul s'ha proveït d'una paleta de colors estàndard, per tal de permetre als usuaris donar color a les seves creacions a partir d'una gamma  estàndard i bàsica. No obstant, aquest colors no són, ni molt menys, la totalitat de colors que es poden fer servir a Allegro 5. Aquesta simplificació evita haver de conèixer les combinacions RGB dels colors que es vulguin pintar, ja que, en cas de no fer servir el mòdul, hauríem d'utilitzar la funció d'Allegro 5 \textbf{al\_map\_rgb(R,G,B)} per poder generar el color i seria tot molt més complicat.
+La llibreria Allegro 5 permet generar colors a partir de combinacions RGB mitjançant la funció \textbf{al\_map\_rgb(R,G,B)} que retorna una variable del tipus ALLEGRO\_COLOR que permet pintar les figures d'Allegro amb el color corresponent a la combinació RGB rebuda per paràmetre.\\
 
-\pagebreak
-\noindent A continuació es llisten els colors disponibles al mòdul a través de la funció \textbf{LS\_allego\_get\_color(COLOR)}
+\noindent Això permet que la combinació de colors de la que disposem per a les nostres creacions sigui gairebé infinita. No obstant això, es va voler simplificar l'accés als colors per evitar que els alumnes de primer haguessin de treballar amb les combinacions RGB.\\
 
+\noindent Per fer-ho es va definir una paleta de colors estàndard que contingués els colors més habituals. D'aquesta manera, de cara als alumnes de primer, els únics colors disponibles per a les seves creacions serien els de dita paleta i la manera d'accedir-hi seria mitjançant la crida a la funció \textbf{LS\_allegro\_get\_color(CONSTANT\_DE\_COLOR)} que s'explicarà amb més detall al llarg d'aquest document.\\
+
+\noindent A continuació es llisten els colors que es troben dins de la paleta de colors estàndard i que poden ser accedits a través de crides a la funció \textbf{LS\_allegro\_get\_color(CONSTANT\_DE\_COLOR}:
 \begin{center}
-\begin{tabular}{| l | l |}
-\hline
-Negre & LS\_allegro\_get\_color(BLACK); \\
-\hline
-Blau Fosc & LS\_allegro\_get\_color(DARK\_BLUE); \\
-\hline
-Verd Fosc & LS\_allegro\_get\_color(DARK\_GREEN); \\
-\hline
-Cian & LS\_allegro\_get\_color(CYAN); \\
-\hline
-Vermell & LS\_allegro\_get\_color(RED); \\
-\hline
-Rosa & LS\_allegro\_get\_color(PINK); \\
-\hline
-Taronja & LS\_allegro\_get\_color(ORANGE); \\
-\hline
-Gris Clar & LS\_allegro\_get\_color(LIGHT\_GRAY); \\
-\hline
-Gris & LS\_allegro\_get\_color(GRAY); \\
-\hline
-Blau & LS\_allegro\_get\_color(BLUE); \\
-\hline
-Verd Clar & LS\_allegro\_get\_color(LIGHT\_GREEN); \\
-\hline
-Blau Cel & LS\_allegro\_get\_color(LIGHT\_BLUE); \\
-\hline
-Granat & LS\_allegro\_get\_color(GARNET); \\
-\hline
-Rosa Clar & LS\_allegro\_get\_color(LIGHT\_PINK); \\
-\hline
-Groc & LS\_allegro\_get\_color(YELLOW); \\
-\hline
-Blanc & LS\_allegro\_get\_color(WHITE); \\
-\hline
-Verd & LS\_allegro\_get\_color(GREEN); \\
-\hline  
-\end{tabular}
+	\begin{tabular}{| l | l |}
+		\hline
+		Constant & Crida\\
+		\hline                      
+  		Negre & LS\_allegro\_get\_color(BLACK); \\
+  		\hline
+  		Blau Fosc & LS\_allegro\_get\_color(DARK\_BLUE); \\
+  		\hline
+  		Verd Fosc & LS\_allegro\_get\_color(DARK\_GREEN); \\
+  		\hline
+  		Cian & LS\_allegro\_get\_color(CYAN); \\
+  		\hline
+  		Vermell & LS\_allegro\_get\_color(RED); \\
+  		\hline
+  		Rosa & LS\_allegro\_get\_color(PINK); \\
+  		\hline
+  		Taronja & LS\_allegro\_get\_color(ORANGE); \\
+  		\hline
+  		Gris Clar & LS\_allegro\_get\_color(LIGHT\_GRAY); \\
+  		\hline
+  		Gris & LS\_allegro\_get\_color(GRAY); \\
+  		\hline
+  		Blau & LS\_allegro\_get\_color(BLUE); \\
+  		\hline
+  		Verd Clar & LS\_allegro\_get\_color(LIGHT\_GREEN); \\
+  		\hline
+  		Blau Cel & LS\_allegro\_get\_color(LIGHT\_BLUE); \\
+  		\hline
+  		Granat & LS\_allegro\_get\_color(GARNET); \\
+  		\hline
+  		Rosa Clar & LS\_allegro\_get\_color(LIGHT\_PINK); \\
+  		\hline
+  		Groc & LS\_allegro\_get\_color(YELLOW); \\
+  		\hline
+  		Blanc & LS\_allegro\_get\_color(WHITE); \\
+  		\hline
+  		Verd & LS\_allegro\_get\_color(GREEN); \\
+  		\hline  
+	\end{tabular}
 \end{center}
 
-\noindent Tal i com es mostra a la taula anterior, les constants de color són per utilitzar-les com a argument de la funció \textbf{LS\_allegro\_get\_color(COLOR)}. Aquesta funció ens retornarà una variable del tipus ALLEGRO\_COLOR, que correspongui amb les característiques del color sol·licitat per l'usuari.\\ Aquest tipus de variable serà de gran utilitat per les funcions de dibuix de figures bàsiques, com per exemple rectangles o cercles que necessiten d'un argument del tipus \textbf{ALLEGRO\_COLOR}.
+\noindent Tal i com es mostra a la taula anterior, les constants de color són per utilitzar-les com a argument de la funció \textbf{LS\_allegro\_get\_color(...)} per tal d'obtenir com a valor de retorn un color del tipus ALLEGRO\_COLOR que correspongui amb les característiques del color sol·licitat per l'usuari.\\ Aquest tipus de variable serà de gran utilitat per les funcions de dibuix de figures bàsiques, com per exemple, rectangles o cercles que necessiten d'un argument d'aquest tipus de variable.
 
 \subsection{Constants de mida de lletra}
-Aquestes constants estan definides al mòdul per tal de facilitar la tasca d'escriptura de textos a través de la finestra gràfica d'Allegro 5. Això es deu a que totes les funcions de dibuix de text de la llibreria requereixen un paràmetre del tipus ALLEGRO\_FONT, i és per això que el mòdul posa a la nostre disposició 4 mides de lletra diferents perquè puguem escriure textos de manera més àgil.
+La llibreria Allegro 5 ja no utilitza la font predefinida pel sistema operatiu com succeïa en version anteriors. Com a novetat, s'obliga a que l'usuari defineixi els tipus de fonts que es volen utilitzar dins del videojoc a través de fitxers de definició de fonts True Type \textit{.ttf}. Això comporta que, a l'inici del programa, s'hagin de carregar i interpretar aquests fitxers tot fixant la mida de la font amb la que es vol treballar.\\
 
-\pagebreak
-\noindent La funció del mòdul que permet obtenir una variable del tipus ALLEGRO\_FONT amb una mida de lletra determinada és \textbf{LS\_allegro\_get\_font(MIDA)} i les combinacions possibles dels paràmetres que pot rebre aquesta funció són les següents:
+\noindent Com ja es pot preveure, aquest tipus de pràctica resulta massa complexa d'entendre per a un alumne de primer, ja que a l'hora de carregar les fonts és necessiten punters i memòria dinàmica que, a segons quines alçades de curs, encara no s'han vist a classe de teoria.\\
 
+\noindent Novament, per simplificar aquesta tasca, el mòdul LS\_Allegro incorpora una interfície que permet treballar de manera fàcil amb les fonts. Concretament, el mòdul sempre intentarà carregar un fitxer anomenat \textit{font.tft} que haurà d'estar al mateix directori que l'executable del nostre videojoc. D'aquesta manera, l'usuari final haurà de descarregar-se una font en format \textit{.ttf}, copiar el fitxer al directori on es trobi l'executable del videojoc i reanomenar el fitxer tot fixant-li el nom \textit{font.ttf}.\\
+
+\noindent Un cop fet això, només caldrà conèixer les diferents mides de fonts predefinides que existeixen dins del mòdul. Aquestes constants són les que podrem passar com a paràmetre a la funció LS\_allegro\_get\_font(CONSTANT\_DE\_FONT) per tal d'obtenir, com a valor de retorn, una variable del tipus ALLEGRO\_FONT * que necessitarem a totes les funcions d'escriptura de text dins de l'entorn gràfic.
+
+\noindent A continuació es deixen les constants disponibles per les diferents mides de font disponibles dins del mòdul així com les seves respectives crides a través de la funció LS\_allegro\_get\_font(..):
 \begin{center}
-\begin{tabular}{|l|r|}
-\hline
-Mida Petita & LS\_allegro\_get\_color(SMALL) \\
-\hline
-Mida Normal & LS\_allegro\_get\_color(NORMAL) \\
-\hline
-Mida Gran & LS\_allegro\_get\_color(LARGE) \\
-\hline
-Mida Gegant & LS\_allegro\_get\_color(EXTRA\_LARGE) \\
-\hline
-\end{tabular}
+	\begin{tabular}{|l|l|}
+		\hline
+		Mida & Crida\\
+		\hline
+		SMALL & LS\_allegro\_get\_font(SMALL) \\
+		\hline	
+		NORMAL & LS\_allegro\_get\_font(NORMAL) \\
+		\hline	
+		LARGE & LS\_allegro\_get\_font(LARGE) \\
+		\hline
+		EXTRA\_LARGE & LS\_allegro\_get\_font(EXTRA\_LARGE) \\
+		\hline
+	\end{tabular}
 \end{center}
 
-\section{Funcions i procediments del mòdul}
+\section{Funcions i procediments del mòdul LS\_allegro}
 
 \subsection{Procediments}
-En aquesta secció s'expliquen tots els detalls que fan referència a les rutines que no retornen cap tipus de variable dins del mòdul LS\_Allegro.
+En aquesta secció s'expliquen tots els detalls que fan referència a les rutines que no retornen cap tipus de variable dins del mòdul LS\_Allegro (retornen void).
 
-\subsubsection{LS\_allegro\_exit()}
+\subsubsection{void LS\_allegro\_exit();}
 
 \textbf{Explicació:}\\
-Aquest procediment serveix per forçar l'alliberament dels recursos emprats pel mòdul LS\_Allegro i la llibreria Allegro 5, per tal de no saturar la memòria RAM de l'ordinador un cop haguem acabat la tasca que requereixi d'interfície gràfica. Cal destacar, que aquest procediment, un cop cridat, alliberarà i tancarà la finestra gràfica d'Allegro \textbf{SENSE CAP MIRAMENT}, i farà que qualsevol configuració anterior es perdi. De cara a futures inicialitzacions d'Allegro, s'hauran de tornar a establir de nou \textbf{totes} les configuracions.\\\\
+Aquest procediment realitza l'alliberació de recursos emprats pel mòdul LS\_Allegro com per la llibreria Allegro 5. Això permet que, un cop haguem acabat la tasca que requereixi d'interfície gràfica, puguem alliberar la memòria RAM del nostre ordinador per tal de deixar espai a la resta de processos i programes que corren simultàniament a l'ordinador.\\
+
+\noindent És important saber, que tota configuració prèvia d'Allegro o del mòdul LS\_Allegro serà eliminada de memòria. Per tant, si es volen recuperar, caldrà tornar a definir-les abans de iniciar de nou la finestra gràfica.\\
+
 \noindent \textbf{Paràmetres:}\\ Cap
 
-\pagebreak
-\subsubsection{LS\_allegro\_paint()}
+\subsubsection{void LS\_allegro\_console\_fflush();}
 \textbf{Explicació:}\\
-Aquest procediment, s'encarrega de dibuixar i mostrar per la finestra gràfica totes les figures, formes i textos que haguem sol·licitat prèviament a través de les crides a les funcions natives de la llibreria Allegro.\\
-Cal notar que, fins que no es cridi aquesta funció, les figures que haguem sol·licitat no apareixeran per pantalla perquè estaran en memòria però ningú les haurà dibuixades a l'entorn gràfic.\\\\
-\textbf{Nota:} Aquesta funció s'ha de cridar sempre dins del bucle infinit del propi joc per tal de que s'estigui refrescant la pantalla de manera indefinida, ja que sinó, no apareixerà res a la finestra gràfica.\\
+Aquest procediment neteja els continguts dels \textit{buffers} d'entrada i de sortida del teclat. Per explicar exactament que fa aquesta funció cal entendre que el sistema operatiu llegeix el teclat com si fos una cua, és a dir, tota tecla que l'usuari premi al teclat és encuada a l'espera de ser llegida.\\
 
-\noindent \textbf{Paràmetres:}\\
-Cap
+\noindent Aquesta cua que conté totes les tecles que s'han premut al teclat és el que anomenem \textit{buffer} d'entrada. D'aquesta manera, quan es volen llegir dades de teclat el sistema operatiu només ha d'anar desencuant tants caràcters com se li hagin demanat. No obstant això, aquesta estratègia presenta un petit problema i és que si l'usuari prem més tecles de les que posteriorment es demanen per llegir, la resta es queden emmagatzemades al \textit{buffer} fins que s'efectuï la següent lectura.\\
 
-\subsubsection{LS\_allegro\_clear\_and\_paint(ALLEGRO\_COLOR color)}
-\textbf{Explicació:}\\
-Aquest procediment s'encarrega, en primer lloc, de pintar tota la finestra gràfica del color especificat en el paràmetre \textit{color}. Un cop pintada la finestra gràfica del color desitjat, realitza la mateixa operació que la funció \textbf{LS\_allegro\_paint()} tot mostrant les figures, textos i formes que havien estat sol·licitades prèviament per l'usuari.\\
+\noindent Com ja es pot entreveure, això pot ser perjudicial perquè la següent lectura de teclat que realitzem no contindrà els caràcters que hagi teclejat l'usuari fins al moment, sinó que contindrà els caràcters que s'hagin quedat de forma residual al buffer més els caràcters que l'usuari hagi premut fins al moment de la lectura.\\
 
-\noindent \textbf{Nota:} Aquesta funció s'ha de cridar sempre dins del bucle infinit del propi joc per tal de que s'estigui refrescant la pantalla de manera indefinida, ja que sinó, no apareixerà res a la finestra gràfica.\\
+\noindent Per solucionar aquest detall, aquest procediment realitza un esborrat incondicional dels caràcters encuats al \textit{buffer} d'entrada del sistema operatiu. D'aquesta manera, si realitzem una crida a aquest procediment abans de qualsevol lectura de teclat, ens assegurarem de que les dades llegides siguin, únicament, les que l'usuari ha premut en aquell moment sense la presència de caràcters residuals.\\
 
-\noindent \textbf{Paràmetres:}\\
-\noindent \textbf{ALLEGRO\_COLOR color} constants de color, que ens són facilitades per la funció \textbf{LS\_allegro\_get\_color(COLOR)}, mitjançant la qual especifiquem de quin color volem que sigui pintada la finestra gràfica.
-
-\newpage
-\subsubsection{LS\_allegro\_console\_fflush()}
-\textbf{Explicació:}\\
-Aquest procediment te com a funció esborrar del \textit{buffer} de teclat (tant d'entrada com de sortida) qualsevol caràcter que hi hagi quedat enregistrat fins al moment. Això és molt útil quan volem esperar una acció de l'usuari, i no estem segurs de si prèviament hi han hagut interaccions d'aquest amb el teclat que han quedat emmagatzemades als \textbf{buffers} sense haver estat processades per cap software.\\\\
-\textbf{Nota:} Aquest procediment presenta múltiples implementacions per a ser compatible en màquines Linux, Windows i MAC, ja que el manegament d'aquests \textit{buffers} és diferent en cada sistema operatiu.\\\\
+\noindent \textbf{Nota:} Aquest procediment presenta múltiples implementacions per a ser compatible en màquines Linux, Windows i MAC, ja que el manegament d'aquests \textit{buffers} és diferent en cada sistema operatiu.\\\\
 \textbf{Paràmetres:}\\ Cap
 
-\subsubsection{LS\_allegro\_console\_clear\_screen()}
+\subsubsection{void LS\_allegro\_console\_clear\_screen();}
 \textbf{Explicació:}\\
-Aquest procediment permet realitzar la tasca d'esborrat de tots els caràcters presents al terminal de consola. D'aquesta manera, som capaços de netejar la finestra de línia de comandes per tal de mostrar informació nova a l'usuari sense que aquest es confongui amb la informació anterior present a la consola.\\\\
-\textbf{Nota:} Aquest procediment té implementacions diferents en funció de si es compila sobre una màquina Linux, Windows o MAC ja que el tractament del netejat de consola és diferent en cada sistema operatiu.\\
+Aquest procediment esborra els continguts de la pantalla de línia de comandes que acompanya sempre tot programa que utilitzi la llibreria Allegro 5. D'aquesta manera, podem mostrar nova informació a l'usuari sense que aquest es confongui amb el contingut anterior de la finestra de consola.\\
+
+\noindent \textbf{Nota:} Aquest procediment té implementacions diferents en funció de si es compila sobre una màquina Linux, Windows o MAC ja que el tractament del netejat de consola és diferent en cada sistema operatiu.\\
 
 \noindent \textbf{Paràmetres:}\\ Cap
 
-\pagebreak
+\subsubsection{void LS\_allegro\_clear\_and\_paint(ALLEGRO\_COLOR color);}
+\textbf{Explicació:}\\
+Per entendre el funcionament d'aquest procediment, s'ha d'explicar com s'ho fa Allegro 5 per mostrar els continguts a través de la finestra gràfica.\\
+
+\noindent La idea és prou senzilla, ens hem d'imaginar que internament, a la RAM del nostre ordinador, existeixen dos finestres gràfiques. Una d'elles és la que veiem per pantalla i l'altre és invisible. Quan nosaltres fem crides a les funcions d'Allegro 5 que permeten dibuixar elements a la finestra gràfica, realment el que estem fent és que aquests elements es dibuixin sobre la finestra gràfica invisible. Aquesta estratègia es deu a que el temps necessari per pintar objectes en una finestra gràfica invisible és molt més baix que el temps per fer-ho en una de visible. \\
+
+\noindent Finalment, per fer que els canvis apareguin per pantalla, només haurem d'intercanviar l'estat de les finestres gràfiques, fent que la visible esdevingui invisible i viceversa. Això permet que mai haguem de perdre temps pintant sobre una finestra gràfica visible, cosa que provocaria que el nostre joc presentés retards alhora de pintar les imatges per pantalla.\\
+
+\noindent Un cop explicat això, podem dir que aquest procediment el que fa és intercanviar l'estat de les dues finestres gràfiques i pintar, del color que rep per paràmetre, el fons de la finestra que queda en estat invisible.
+
+\noindent \textbf{Paràmetres:} \\
+\textbf{ALLEGRO\_COLOR color:} Color del qual volem pintar la pantalla. Ha de ser del tipus ALLEGRO\_COLOR, que recordem que es pot generar amb la funció \textbf{ALLEGRO\_COLOR LS\_allegro\_get\_color( int nColor)}.\\
+
 \subsection{Funcions}
 En aquesta secció s'expliquen tots els detalls que fan referència a les rutines del mòdul LS\_Allegro que retornen algun tipus de dada diferent a void que pot ser interessant recollir en alguns dels cassos.
 
-\subsubsection{LS\_allegro\_init(int,int, char *)}
+\subsubsection{int LS\_allegro\_init(int nWidth,int nHeight, char *sWindowName);}
 \textbf{Explicació:}\\
 Aquesta funció s'encarrega d'inicialitzar i demanar memòria per a tots els components necessaris per crear la finestra gràfica d'Allegro 5. Els paràmetres d'aquesta funció permeten fixar la mida de la finestra que es vol crear així com també el seu títol.\\\\
-\textbf{Nota:} Aquesta funció haurà de ser cridada abans de fer ús qualsevol altra funció del mòdul, ja que si no s'inicialitza Allegro 5, tota la resta de funcions del mòdul no funcionaran o experimentaran un funcionament anòmal.\\
+\textbf{Nota:} Aquesta funció haurà de ser cridada abans de fer ús qualsevol altra funció d'aquest mòdul, ja que si no s'inicialitza Allegro 5, la resta de funcions no funcionaran o experimentaran un funcionament anòmal.\\
 
 \noindent \textbf{Paràmetres:}\\
 \textbf{int nWidth:} Enter que determina la mida en amplada de la finestra gràfica que es desitja crear.\\
 \textbf{int nHeight:} Enter que determina la mida en alçada de la finestra gràfica que es desitja crear.\\
-\textbf{char * sWindowName: } Cadena de caràcter que estableix el nom de la finestra gràfica que es desitja crear.\\
+\textbf{char *sWindowName: } Cadena de caràcter que estableix el nom de la finestra gràfica que es desitja crear.\\
 
 \noindent \textbf{Retorn:}\\
-Aquesta funció retornarà un enter, el valor del qual dependrà de si s'ha pogut inicialitzar la llibreria Allegro 5 o no. En cas de que tot hagi anat bé, retornarà un 1 (CERT). En qualsevol altre cas, retornarà un 0 (FALS) cosa que ens alertarà que Allegro 5 no s'ha inicialitzat i que per tant \textbf{NO} es poden usar ni les funcions natives d'Allegro 5 ni les del mòdul LS\_Allegro.
+Aquesta funció retornarà un enter el valor del qual dependrà de si s'ha pogut o no inicialitzar la llibreria Allegro 5. En cas satisfactori, aquesta funció retornarà un 1 (CERT). En qualsevol altre cas, retornarà un 0 (FALS) que ens alertarà que Allegro 5 no s'ha inicialitzat i que per tant \textbf{no} es poden usar les funcions ni d'Allegro 5 ni del mòdul LS\_Allegro.
 
-\pagebreak
-\subsubsection{int LS\_allegro\_key\_pressed(int)}
+\newpage
+\subsubsection{int LS\_allegro\_key\_pressed(int nKey)}
 \textbf{Explicació:}\\
-Aquesta funció s'encarrega de retornar un enter el valor del qual depèn de si s'ha premut, o no, la tecla en qüestió que se li passa com a paràmetre.\\
-Perquè aquesta funció funcioni correctament, s'ha d'estar cridant de manera indefinida (dins del bucle infinit del joc). En cas de no realitzar-se aquesta crida de manera indefinida, no retornarà mai CERT encara que s'hagi premut la tecla múltiples vegades.\\\\
-\textbf{IMPORTANT:} Aquesta funció efectua una lectura destructiva, que vol dir que un cop consultat l'estat de la tecla, es resetejarà l'estat d'aquesta a no premuda automàticament. Per tant, si l'usuari prem una tecla i efectuem dos crides a aquesta funció avaluant la mateixa tecla, la primera crida retornarà CERT però la segona ens retornarà FALS, a menys que entremig l'usuari hagi tornat a prémer la tecla.\\\\
-\textbf{Paràmetres:}\\
-\textbf{int nKey:} Aquest enter, simbolitza la tecla de la qual volem obtenir informació de si ha estat premuda per l'usuari o no. Els valors que pot adoptar aquest paràmetre es presenten a continuació:\\
+Aquesta funció s'encarrega de retornar un enter el valor del qual dependrà de si l'usuari ha premut o no la tecla que se li passa com a paràmetre.\\
+
+\noindent \textbf{Nota:} Cal tenir molt en compte que aquesta funció efectua una lectura destructiva quan consulta l'estat d'una tecla en concret. Això vol dir que, al cridar-la, aquesta retornarà si ha estat o no premuda però forçarà que el nou estat de la tecla, just després de la consulta, sigui \textbf{no} premuda.\\
+
+\noindent \textbf{Paràmetres:}
+\noindent \textbf{int nKey:} Aquest enter simbolitza la tecla de la qual volem consultar l'estat. Els valors que pot adoptar aquest paràmetre es mostren a continuació:\\
 
 \begin{large}
-\textbf{Lletres:}
+	\textbf{Lletres:}
 \end{large}
 
-
 \begin{center}
-\begin{tabular}{l|l|l}
-ALLEGRO\_KEY\_A & ALLEGRO\_KEY\_K & ALLEGRO\_KEY\_T	\\
-ALLEGRO\_KEY\_B & ALLEGRO\_KEY\_L & ALLEGRO\_KEY\_U \\
-ALLEGRO\_KEY\_C & ALLEGRO\_KEY\_M & ALLEGRO\_KEY\_V	\\
-ALLEGRO\_KEY\_D & ALLEGRO\_KEY\_M & ALLEGRO\_KEY\_W	\\
-ALLEGRO\_KEY\_E & ALLEGRO\_KEY\_N & ALLEGRO\_KEY\_X	\\
-ALLEGRO\_KEY\_F & ALLEGRO\_KEY\_O & ALLEGRO\_KEY\_Y	\\
-ALLEGRO\_KEY\_G & ALLEGRO\_KEY\_P & ALLEGRO\_KEY\_Z \\
-ALLEGRO\_KEY\_H & ALLEGRO\_KEY\_Q \\
-ALLEGRO\_KEY\_I	& ALLEGRO\_KEY\_R \\
-ALLE	GRO\_KEY\_J 	& ALLEGRO\_KEY\_S \\
-\end{tabular}
+	\begin{tabular}{l|l|l}
+		ALLEGRO\_KEY\_A & ALLEGRO\_KEY\_K & ALLEGRO\_KEY\_T	\\
+		ALLEGRO\_KEY\_B & ALLEGRO\_KEY\_L & ALLEGRO\_KEY\_U \\
+		ALLEGRO\_KEY\_C & ALLEGRO\_KEY\_M & ALLEGRO\_KEY\_V	\\
+		ALLEGRO\_KEY\_D & ALLEGRO\_KEY\_M & ALLEGRO\_KEY\_W	\\
+		ALLEGRO\_KEY\_E & ALLEGRO\_KEY\_N & ALLEGRO\_KEY\_X	\\
+		ALLEGRO\_KEY\_F & ALLEGRO\_KEY\_O & ALLEGRO\_KEY\_Y	\\	
+		ALLEGRO\_KEY\_G & ALLEGRO\_KEY\_P & ALLEGRO\_KEY\_Z \\
+		ALLEGRO\_KEY\_H & ALLEGRO\_KEY\_Q \\
+		ALLEGRO\_KEY\_I	& ALLEGRO\_KEY\_R \\
+		ALLE	GRO\_KEY\_J 	& ALLEGRO\_KEY\_S \\
+	\end{tabular}
 \end{center}
 
-\pagebreak
+\newpage
+
 \begin{large}
-\textbf{Caràcters Especials:}
+	\textbf{Caràcters Especials:}
 \end{large}
 
-
 \begin{center}
-\begin{tabular}{l|l}
-ALLEGRO\_KEY\_F1	&  ALLEGRO\_KEY\_ENTER	 \\ ALLEGRO\_KEY\_PAD\_ASTERISK & ALLEGRO\_KEY\_SEMICOLON2 \\
-ALLEGRO\_KEY\_F2	&  ALLEGRO\_KEY\_SEMICOLON	 \\ ALLEGRO\_KEY\_PAD\_MINUS & ALLEGRO\_KEY\_COMMAND \\
-ALLEGRO\_KEY\_F3	&  ALLEGRO\_KEY\_QUOTE	\\ ALLEGRO\_KEY\_PAD\_PLUS	 & ALLEGRO\_KEY\_LSHIFT \\
-ALLEGRO\_KEY\_F4	&  ALLEGRO\_KEY\_BACKSLASH	\\ ALLEGRO\_KEY\_PAD\_DELETE & ALLEGRO\_KEY\_RSHIFT\\
-ALLEGRO\_KEY\_F5	&  ALLEGRO\_KEY\_BACKSLASH2 \\	ALLEGRO\_KEY\_PAD\_ENTER & 	ALLEGRO\_KEY\_LCTRL \\
-ALLEGRO\_KEY\_F6	&  ALLEGRO\_KEY\_COMMA	 \\ ALLEGRO\_KEY\_PRINTSCREEN & ALLEGRO\_KEY\_RCTRL \\
-ALLEGRO\_KEY\_F7	&  ALLEGRO\_KEY\_FULLSTOP \\ ALLEGRO\_KEY\_PAUSE & ALLEGRO\_KEY\_ALT \\
-ALLEGRO\_KEY\_F8	&  ALLEGRO\_KEY\_SLASH \\ ALLEGRO\_KEY\_ABNT\_C1	 & ALLEGRO\_KEY\_ALTGR \\
-ALLEGRO\_KEY\_F9	&  ALLEGRO\_KEY\_SPACE	 \\ ALLEGRO\_KEY\_YEN	 & ALLEGRO\_KEY\_LWIN	\\
-ALLEGRO\_KEY\_F10	&  ALLEGRO\_KEY\_INSERT \\ ALLEGRO\_KEY\_KANA & ALLEGRO\_KEY\_RWIN	\\
-ALLEGRO\_KEY\_F11	&  ALLEGRO\_KEY\_DELETE \\ ALLEGRO\_KEY\_CONVERT	 & ALLEGRO\_KEY\_MENU \\
-ALLEGRO\_KEY\_F12	&  ALLEGRO\_KEY\_HOME \\ ALLEGRO\_KEY\_NOCONVERT & ALLEGRO\_KEY\_SCROLLLOCK \\
-ALLEGRO\_KEY\_ESCAPE & ALLEGRO\_KEY\_END \\ ALLEGRO\_KEY\_NOCONVERT & ALLEGRO\_KEY\_NUMLOCK \\
-ALLEGRO\_KEY\_TILDE & ALLEGRO\_KEY\_PGUP	 \\ ALLEGRO\_KEY\_AT & ALLEGRO\_KEY\_CAPSLOCK \\
-ALLEGRO\_KEY\_MINUS & 	ALLEGRO\_KEY\_PGDN \\ ALLEGRO\_KEY\_AT &
-ALLEGRO\_KEY\_EQUALS \\ ALLEGRO\_KEY\_LEFT & ALLEGRO\_KEY\_CIRCUMFLEX \\
-ALLEGRO\_KEY\_BACKSPACE & ALLEGRO\_KEY\_RIGHT \\ ALLEGRO\_KEY\_COLON2 & ALLEGRO\_KEY\_RCTRL \\
-ALLEGRO\_KEY\_TAB	& ALLEGRO\_KEY\_UP \\ ALLEGRO\_KEY\_KANJI &
-ALLEGRO\_KEY\_OPENBRACE \\ ALLEGRO\_KEY\_DOWN & ALLEGRO\_KEY\_PAD\_EQUALS \\
-ALLEGRO\_KEY\_CLOSEBRACE & ALLEGRO\_KEY\_PAD\_SLASH \\ ALLEGRO\_KEY\_BACKQUOTE \\
-\end{tabular}
+	\begin{tabular}{l|l}
+		ALLEGRO\_KEY\_F1	&  ALLEGRO\_KEY\_ENTER	 \\ ALLEGRO\_KEY\_PAD\_ASTERISK & ALLEGRO\_KEY\_SEMICOLON2 \\
+   		ALLEGRO\_KEY\_F2	&  ALLEGRO\_KEY\_SEMICOLON	 \\ ALLEGRO\_KEY\_PAD\_MINUS & ALLEGRO\_KEY\_COMMAND \\
+   		ALLEGRO\_KEY\_F3	&  ALLEGRO\_KEY\_QUOTE	\\ ALLEGRO\_KEY\_PAD\_PLUS	 & ALLEGRO\_KEY\_LSHIFT \\
+   		ALLEGRO\_KEY\_F4	&  ALLEGRO\_KEY\_BACKSLASH	\\ ALLEGRO\_KEY\_PAD\_DELETE & ALLEGRO\_KEY\_RSHIFT\\
+   		ALLEGRO\_KEY\_F5	&  ALLEGRO\_KEY\_BACKSLASH2 \\	ALLEGRO\_KEY\_PAD\_ENTER & 	ALLEGRO\_KEY\_LCTRL \\
+   		ALLEGRO\_KEY\_F6	&  ALLEGRO\_KEY\_COMMA	 \\ ALLEGRO\_KEY\_PRINTSCREEN & ALLEGRO\_KEY\_RCTRL \\
+   		ALLEGRO\_KEY\_F7	&  ALLEGRO\_KEY\_FULLSTOP \\ ALLEGRO\_KEY\_PAUSE & ALLEGRO\_KEY\_ALT \\
+   		ALLEGRO\_KEY\_F8	&  ALLEGRO\_KEY\_SLASH \\ ALLEGRO\_KEY\_ABNT\_C1	 & ALLEGRO\_KEY\_ALTGR \\
+	    ALLEGRO\_KEY\_F9	&  ALLEGRO\_KEY\_SPACE	 \\ ALLEGRO\_KEY\_YEN	 & ALLEGRO\_KEY\_LWIN	\\
+	    ALLEGRO\_KEY\_F10	&  ALLEGRO\_KEY\_INSERT \\ ALLEGRO\_KEY\_KANA & ALLEGRO\_KEY\_RWIN	\\
+	    ALLEGRO\_KEY\_F11	&  ALLEGRO\_KEY\_DELETE \\ ALLEGRO\_KEY\_CONVERT	 & ALLEGRO\_KEY\_MENU \\
+	    ALLEGRO\_KEY\_F12	&  ALLEGRO\_KEY\_HOME \\ ALLEGRO\_KEY\_NOCONVERT & ALLEGRO\_KEY\_SCROLLLOCK \\
+		ALLEGRO\_KEY\_ESCAPE & ALLEGRO\_KEY\_END \\ ALLEGRO\_KEY\_NOCONVERT & ALLEGRO\_KEY\_NUMLOCK \\
+   		ALLEGRO\_KEY\_TILDE & ALLEGRO\_KEY\_PGUP	 \\ ALLEGRO\_KEY\_AT & ALLEGRO\_KEY\_CAPSLOCK \\
+   		ALLEGRO\_KEY\_MINUS & 	ALLEGRO\_KEY\_PGDN \\ ALLEGRO\_KEY\_AT &
+	    ALLEGRO\_KEY\_EQUALS \\ ALLEGRO\_KEY\_LEFT & ALLEGRO\_KEY\_CIRCUMFLEX \\
+	    ALLEGRO\_KEY\_BACKSPACE & ALLEGRO\_KEY\_RIGHT \\ ALLEGRO\_KEY\_COLON2 & ALLEGRO\_KEY\_RCTRL \\
+	    ALLEGRO\_KEY\_TAB	& ALLEGRO\_KEY\_UP \\ ALLEGRO\_KEY\_KANJI &
+	    ALLEGRO\_KEY\_OPENBRACE \\ ALLEGRO\_KEY\_DOWN & ALLEGRO\_KEY\_PAD\_EQUALS \\
+	    ALLEGRO\_KEY\_CLOSEBRACE & ALLEGRO\_KEY\_PAD\_SLASH \\ ALLEGRO\_KEY\_BACKQUOTE \\
+	\end{tabular}
 \end{center}
 
+\newpage
+
 \begin{large}
-\textbf{Numèrics:}
+	\textbf{Numèrics:}
 \end{large}
 
 \begin{center}
-\begin{tabular}{l|l}
-ALLEGRO\_KEY\_0 & ALLEGRO\_KEY\_PAD\_0 \\
-ALLEGRO\_KEY\_1 &	ALLEGRO\_KEY\_PAD\_1 \\
-ALLEGRO\_KEY\_2 &	ALLEGRO\_KEY\_PAD\_2 \\
-ALLEGRO\_KEY\_3 & 	ALLEGRO\_KEY\_PAD\_3 \\
-ALLEGRO\_KEY\_4 & ALLEGRO\_KEY\_PAD\_4 \\
-ALLEGRO\_KEY\_5 & 	ALLEGRO\_KEY\_PAD\_5 \\
-ALLEGRO\_KEY\_6 & 	ALLEGRO\_KEY\_PAD\_6 \\
-ALLEGRO\_KEY\_7 & ALLEGRO\_KEY\_PAD\_7 \\
-ALLEGRO\_KEY\_8 & ALLEGRO\_KEY\_PAD\_8 \\
-ALLEGRO\_KEY\_9 & ALLEGRO\_KEY\_PAD\_9 \\
-\end{tabular}
+	\begin{tabular}{l|l}
+		ALLEGRO\_KEY\_0 & ALLEGRO\_KEY\_PAD\_0 \\
+   		ALLEGRO\_KEY\_1 &	ALLEGRO\_KEY\_PAD\_1 \\
+  		ALLEGRO\_KEY\_2 &	ALLEGRO\_KEY\_PAD\_2 \\	
+   		ALLEGRO\_KEY\_3 & 	ALLEGRO\_KEY\_PAD\_3 \\
+   		ALLEGRO\_KEY\_4 & ALLEGRO\_KEY\_PAD\_4 \\
+   		ALLEGRO\_KEY\_5 & 	ALLEGRO\_KEY\_PAD\_5 \\
+   		ALLEGRO\_KEY\_6 & 	ALLEGRO\_KEY\_PAD\_6 \\
+   		ALLEGRO\_KEY\_7 & ALLEGRO\_KEY\_PAD\_7 \\		
+   		ALLEGRO\_KEY\_8 & ALLEGRO\_KEY\_PAD\_8 \\		
+   		ALLEGRO\_KEY\_9 & ALLEGRO\_KEY\_PAD\_9 \\		
+	\end{tabular}
 \end{center}
 
 \noindent \textbf{Retorn:}\\
-Aquesta funció retorna un enter, el valor del qual dependrà de si la tecla ha estat premuda per l'usuari o no. Els únics valors que aquest enter pot prendre són 1 (CERT) [Tecla premuda] o bé, 0 (FALS) [Tecla NO premuda].
+Aquesta funció retorna un enter el valor del qual dependrà de si la tecla ha estat premuda per l'usuari o no. Els únics valors que aquest enter pot prendre són 1 (CERT) [Tecla premuda] o bé, 0 (FALS) [Tecla NO premuda].
 
 \pagebreak
-\subsubsection{LS\_allegro\_get\_color(int)}
-\textbf{Explicació:}
-Aquesta funció s'encarrega de retornar una variable del tipus ALLEGRO\_COLOR, amb la configuració adequada per representar el color que ha rebut per paràmetre. Serà una funció molt utilitzada en totes aquelles funcions d'Allegro 5 que serveixen per pintar figures senzilles a la finestra gràfica, i necessitem establir-ne el color d'aquestes usant el tipus de variable ALLEGRO\_COLOR.\\
+\subsubsection{ALLEGRO\_COLOR LS\_allegro\_get\_color(int nColor)}
+\textbf{Explicació:}\\
+Aquesta funció s'encarrega de retornar una variable del tipus ALLEGRO\_COLOR amb la configuració adequada per representar el color que ha rebut per paràmetre. Serà una funció molt utilitzada en totes aquelles funcions d'Allegro 5 que serveixen per pintar figures senzilles a la finestra gràfica i que demanen un paràmetre del tipus ALLEGRO\_COLOR per especificar el color de la figura que permeten pintar.\\
 
 \noindent \textbf{Paràmetres:}\\
 \textbf{int nColor}: Aquest enter representa el color que es vol obtenir en el format de variable ALLEGRO\_COLOR. A continuació es mostra una llista dels colors disponibles:
 \begin{center}
-\begin{tabular}{l|l}
-BLACK  & DARK\_BLUE \\
-DARK\_GREEN & CYAN \\
-RED  &  PINK \\
-ORANGE  & LIGHT\_GRAY \\
-GRAY & BLUE \\
-LIGHT\_GREEN  & LIGHT\_BLUE \\
-GARNET  & LIGHT\_PINK \\
-YELLOW & WHITE \\
-GREEN \\
-\end{tabular}
+	\begin{tabular}{l|l}
+		BLACK  & DARK\_BLUE \\
+		DARK\_GREEN & CYAN \\
+		RED  &  PINK 5 \\
+		ORANGE  & LIGHT\_GRAY \\
+		GRAY & BLUE \\
+		LIGHT\_GREEN  & LIGHT\_BLUE \\
+		GARNET  & LIGHT\_PINK \\
+		YELLOW & WHITE \\
+		GREEN \\
+	\end{tabular}
 \end{center}
 
 \noindent \textbf{Retorn:} \\
-Aquesta funció retorna una variable del tipus ALLEGRO\_COLOR, configurada per representar el color que se li ha especificat mitjançant el paràmetre nColor.
-
-\pagebreak
-\subsubsection{LS\_allegro\_get\_font(int)}
+Aquesta funció retorna una variable del tipus ALLEGRO\_COLOR configurada per representar el color que se li ha especificat mitjançant el paràmetre nColor.
+   	
+\subsubsection{ALLEGRO\_FONT* LS\_allegro\_get\_font(int nSize)}
 \textbf{Explicació:}\\
-Aquesta funció s'encarrega de retornar una variable del tipus ALLEGRO\_FONT*, amb la configuració adient perquè es representi la font amb la mida especificada al paràmetre nSize.\\\\
-\textbf{Nota:} La font que s'utilitzarà serà aquella que es trobi dins de la carpeta del projecte i s'anomeni \textit{font.ttf}. En cas de que no hi hagi cap fitxer en el directori del projecte amb el nom font.ttf o que sigui un fitxer corrupte, el mòdul LS\_Allegro no carregarà i mostrarà un error al respecte.
+Aquesta funció s'encarrega de retornar una variable del tipus ALLEGRO\_FONT* amb la configuració de mida que s'ha rebut per paràmetre. Serà una funció molt utilitzada en totes aquelles crides a funcions d'Allegro 5 que serveixin per pintar text per la finestra gràfica, ja que totes demanen un paràmetre del tipus ALLEGRO\_FONT* per especificar el tipus i la mida de la font que s'utilitzarà per representar el text.\\
 
+\noindent \textbf{Nota:} La font que s'utilitzarà serà aquella que es trobi dins de la carpeta del projecte i s'anomeni font.ttf. En cas de que no hi hagi cap fitxer en el directori del projecte amb el nom font.ttf o que sigui un fitxer corrupte, el mòdul LS\_Allegro no carregarà i mostrarà un missatge d'error.
+	
 \noindent \textbf{Paràmetres:}\\
-\textbf{int nSize} : Aquest enter indica la mida de la font que es desitja obtenir com a resultat de la crida de la funció. A continuació es llisten les mides disponibles:
+\textbf{int nColor} : Aquest enter indica la mida de la font que es desitja obtenir com a resultat de la crida de la funció. A continuació es llisten les mides disponibles:
 
 \begin{center}
-\begin{tabular}{l|l}
-SMALL & NORMAL\\
-LARGE & EXTRA\_LARGE\\
-\end{tabular}
+	\begin{tabular}{l|l}
+		SMALL & NORMAL\\
+		LARGE & EXTRA\_LARGE\\	
+	\end{tabular}
 \end{center}
 
 \noindent \textbf{Retorn:}\\
-Aquesta funció retorna una variable del tipus ALLEGRO\_FONT*, que conté la configuració adient per representar la font especificada al fitxer font.ttf amb la mida especificada al paràmetre nSize.
+Aquesta funció retorna una variable del tipus ALLEGRO\_FONT* que conté la configuració adient per representar la font especificada al fitxer font.ttf amb la mida especificada al paràmetre nSize.
+   	
+\newpage
+\section{Funcions i procediments pròpies d'Allegro}
+Fins ara s'han descrit les funcions i procediments per treballar amb el mòdul LS\_allegro. Com ja hem dit abans, aquest s'ofereix per simplificar la interacció entre els alumnes i la llibreria Allegro 5. No obstant això, hi haurà funcions natives d'Allegro que sí hauran de conèixer els alumnes, ja que són les que els permetran dibuixar i mostrar text dins de la finestra gràfica i que, per tant, necessitaran cridar a l'hora d'implementar la seva pràctica. \\
 
+\noindent La idea d'aquesta secció del manual és explicar de manera detallada cadascuna d'aquestes funcions natives d'Allegro per tal que els alumnes les puguin fer servir al llarg del desenvolupament de la pràctica.
+\subsection{Procediments}
+A continuació s'explicaran els procediments que proporciona Allegro 5 per pintar figures bàsiques a la finestra gràfica.\\
+
+\subsubsection{void al\_draw\_line(float x1, float y1, float x2, float y2, ALLEGRO\_COLOR color, float thickness)}
+\textbf{Explicació:}\\
+Aquest procediment dibuixa una recta entre els dos punts que se li especifiquen a través dels paràmetres \textbf{x1}, \textbf{y1}, \textbf{x2} i \textbf{y2}. D'aquesta manera, si ens ho imaginem sobre un espai 2D, ens dibuixarà una línia recta entre els punts (x1,y1) i (x2,y2).\\
+
+\noindent \textbf{Paràmetres:}\\
+\textbf{float x1:} Coordenada X del punt que farà d'origen de la recta.\\
+\textbf{float y1:} Coordenada Y del punt que farà d'origen de la recta.\\
+\textbf{float x2:} Coordenada X del punt que farà de destí de la recta.\\
+\textbf{float y2:} Coordenada Y del punt que farà de destí de la recta.\\
+\textbf{ALLEGRO\_COLOR color:} Estructura ALLEGRO\_COLOR que especifica de quin color serà la recta.\\
+
+\noindent \textbf{Nota:} Aquesta estructura la podem generar mitjançant la crida a la funció \textbf{ LS\_allegro\_get\_color( int nColor)}.\\
+
+\noindent \textbf{float thickness:} Aquest paràmetre descriu el gruix de la línia a pintar. Per defecte, el valor que se li ha de fixar és 0.\\
+
+\newpage		
+\subsubsection{void al\_draw\_triangle(float x1, float y1, float x2, float y2, float x3, float y3, ALLEGRO\_COLOR color, float thickness)}
+\textbf{Explicació:}\\
+Aquest procediment dibuixa el contorn d'un triangle entre els tres punts especificats, sent cada un dels punts un vertex del triangle.\\
+
+\noindent \textbf{Paràmetres:}\\
+\textbf{float x1:} Coordenada X del punt que fa de primer vertex del triangle.\\
+\textbf{float y1:} Coordenada Y del punt que fa de primer vertex del triangle.\\
+\textbf{float x2:} Coordenada X del punt que fa de segon vertex del triangle.\\
+\textbf{float y2:} Coordenada Y del punt que fa de segon vertex del triangle.\\
+\textbf{float x3:} Coordenada X del punt que fa de tercer vertex del triangle.\\
+\textbf{float y3:} Coordenada Y del punt que fa de tercer vertex del triangle.\\
+\textbf{ALLEGRO\_COLOR color:} Estructura ALLEGRO\_COLOR que especifica de quin color serà la figura.\\
+ 
+\noindent \textbf{Nota:} Aquesta estructura la podem generar mitjançant la crida a la funció \textbf{LS\_allegro\_get\_color( int nColor)}.\\
+
+\noindent\textbf{float thickness:} Aquest paràmetre descriu l'amplada del contorn del triangle. Per defecte, el valor que se li ha de fixar és 0.\\
+
+\newpage		
+\subsubsection{void al\_draw\_filled\_triangle(float x1, float y1, float x2, float y2, float x3, float y3, ALLEGRO\_COLOR color)}
+\textbf{Explicació:}\\
+Aquest procediment dibuixa un triangle entre els tres punts especificats. A diferència del procediment anterior, en aquest cas, el triangle té l'interior pintat del color que s'especifiqui al paràmetre \textit{color}.\\
+
+\noindent \textbf{Paràmetres:}\\
+\textbf{float x1:} Coordenada X del punt que actua de primer vertex del triangle.\\
+\textbf{float y1:} Coordenada Y del punt que actua de primer vertex del triangle.\\
+\textbf{float x2:} Coordenada X del punt que actua de segon vertex del triangle.\\
+\textbf{float y2:} Coordenada Y del punt que actua de segon vertex del triangle.\\
+\textbf{float x3:} Coordenada X del punt que actua de tercer vertex del triangle.\\
+\textbf{float y3:} Coordenada Y del punt que actua de terece vertex del triangle.\\
+\textbf{ALLEGRO\_COLOR color:} Estructura ALLEGRO\_COLOR que especifica de quin color serà la figura i el seu interior.\\
+
+\noindent \textbf{Nota:} Aquesta estructura la podem generar mitjançant la crida a la funció \textbf{ LS\_allegro\_get\_color( int nColor)}.\\
+
+\newpage	
+\subsubsection{void al\_draw\_rectangle(float x1, float y1, float x2, float y2, ALLEGRO\_COLOR color, float thickness)}
+\textbf{Explicació:}\\
+Aquest procediment dibuixa el contorn d'un rectangle. El rectangle es dibuixarà entre dos vèrtexs. Les primeres coordenades especifiquen la posició del vèrtex superior esquerre del rectangle, mentre que les segones especifiquen el vèrtex inferior dret.\\
+
+\noindent \textbf{Paràmetres:}\\
+\textbf{float x1:} Coordenada X del vertex superior esquerre del rectangle.\\
+\textbf{float y1:} Coordenada Y del vertex superior esquerre del rectangle.\\
+\textbf{float x2:} Coordenada X del vertex inferior dret del rectangle .\\
+\textbf{float y2:} Coordenada Y del vertex inferior dret del rectangle.\\
+\textbf{ALLEGRO\_COLOR color:} Estructura ALLEGRO\_COLOR que especifica de quin color serà la figura. 
+\noindent \textbf{Nota:} Aquesta estructura la podem generar mitjançant la crida a la funció \textbf{LS\_allegro\_get\_color( int nColor)}.\\
+
+\noindent\textbf{float thickness:} Aquest paràmetre descriu l'amplada del contorn del rectangle. Per defecte, el valor que se li ha de fixar és 0.\\
+
+\pagebreak		
+\subsubsection{void al\_draw\_filled\_rectangle(float x1, float y1, float x2, float y2, ALLEGRO\_COLOR color)}
+\textbf{Explicació:}\\
+Aquest procediment dibuixa un rectangle ple de color. A diferència del procediment anterior, aquest no només dibuixa el contorn de la figura sinó que també n'omple el domini amb el color que s'especifica al paràmetre \textit{color} del procediment.
+
+\noindent \textbf{Paràmetres:}\\
+\textbf{float x1:} Coordenada X del vertex superior esquerre del rectangle.\\
+\textbf{float y1:} Coordenada Y del vertex superior esquerre del rectangle.\\
+\textbf{float x2:} Coordenada X del vertex inferior dret del rectangle.\\
+\textbf{float y2:} Coordenada Y del vertex inferior dret del rectangle.\\
+\textbf{ALLEGRO\_COLOR color:} Estructura ALLEGRO\_COLOR que especifica de quin color serà la figura.\\
+
+\noindent \textbf{Nota:} Aquesta estructura la podem generar mitjançant la crida a la funció \textbf{LS\_allegro\_get\_color(int nColor)}.\\
+
+\newpage	
+\subsubsection{void al\_draw\_circle(float cx, float cy, float r, ALLEGRO\_COLOR color, float thickness)}
+\textbf{Explicació:}\\
+Aquest procediment dibuixa el contorn d'un cercle. Per fer-ho necessita un punt (en coordenades) que especifiqui el centre del cercle i el valor del radi.\\
+
+\noindent \textbf{Paràmetres:}\\
+\textbf{float cx:} Coordenada X del punt que actua de centre del cercle.\\
+\textbf{float cy:} Coordenada Y del punt que actua de centre del cercle.\\
+\textbf{float r:} Distància en píxels entre qualsevol punt del contorn del cercle i el centre. No és més que el radi expressat en píxels.\\
+\textbf{ALLEGRO\_COLOR color:} Estructura ALLEGRO\_COLOR que especifica de quin color serà el contorn de la figura. \\
+
+\noindent \textbf{Nota:} Aquesta estructura la podem generar mitjançant la crida a la funció \textbf{LS\_allegro\_get\_color( int nColor)}.\\
+
+\noindent \textbf{float thickness:} Aquest paràmetre descriu l'amplada del contorn del cercle.\\
+
+\newpage	
+\subsubsection{void al\_draw\_filled\_circle(float cx, float cy, float r, ALLEGRO\_COLOR color)}
+\textbf{Explicació:}\\
+Aquest procediment dibuixa un cercle ple de color. Per fer-ho, necessita un punt (en coordenades) que determini el centre del cercle i el valor del radi.\\
+
+\noindent \textbf{Paràmetres:}\\
+\textbf{float cx:} Coordenada X del punt que actua de centre del cercle.\\
+\textbf{float cy:} Coordenada Y del punt que actua de centre del cercle.\\
+\textbf{float r:} Distància en píxels entre qualsevol punt del contorn del cercle i el centre. No és més que el radi expressat en píxels.\\
+\textbf{ALLEGRO\_COLOR color:} Estructura ALLEGRO\_COLOR que especifica de quin color serà la figura.\\
+
+\noindent \textbf{Nota:} Aquesta estructura la podem generar mitjançant la crida a la funció \textbf{LS\_allegro\_get\_color(int nColor)}.\\
+
+\newpage		
+\subsubsection{void al\_draw\_ellipse(float cx, float cy, float rx, float ry, ALLEGRO\_COLOR color, float thickness))}
+\textbf{Explicació:}\\
+Aquest procediment dibuixa el contorn d'una el·lipse a la finestra gràfica d'Allegro 5. Per fer-ho necessita rebre un punt (en coordenades) que determini el centre de l'el·lipse. Per altra banda i a diferència dels procediments vinculats amb els cercles, aquest procediment necessita rebre la mesura dels dos radis que definiran la forma de l'el·lipse a dibuixar.\\
+
+\noindent \textbf{Paràmetres:}\\
+\textbf{float cx:} Coordenada X del punt que actuarà de centre de l'el·lipse.\\
+\textbf{float cy:} Coordenada Y del punt que actuarà de centre de l'el·lipse.\\
+\textbf{float rx:} Nombre de píxels que especifiquen la longitud del radi horitzontal de l'el·lipse.\\
+\textbf{float ry:} Nombre de píxels que especifiquen la longitud del radi vertical de l'el·lipse.\\
+\textbf{ALLEGRO\_COLOR color:} Estructura ALLEGRO\_COLOR que especifica de quin color serà la figura.\\
+
+\noindent \textbf{Nota:} Aquesta estructura la podem generar mitjançant la crida a la funció \textbf{LS\_allegro\_get\_color(int nColor)}.\\
+
+\noindent \textbf{float thickness:} Aquest paràmetre descriu l'amplada del contorn de l'el·lipse.\\
+
+\pagebreak		
+\subsubsection{void al\_draw\_filled\_ellipse(float cx, float cy, float rx, float ry, ALLEGRO\_COLOR color)}
+\textbf{Explicació:}\\
+Aquest procediment dibuixa una el·lipse plena de color. A diferència del procediment anterior, aquí el paràmetre \textit{color} no determina de quin color serà el contorn de l'el·lipse sino que, en aquest cas, determina de quin color es pintarà tant el contorn com el domini d'aquesta.\\
+\noindent De manera anàloga, també necessita rebre un punt (en coordenades) que determini el centre de l'el·lipse i dos radis que determinin quina forma tindrà aquesta.\\
+
+\noindent \textbf{Paràmetres:}\\
+\textbf{float cx:} Coordenada X del punt que actuarà de centre de l'el·lipse.\\
+\textbf{float cy:} Coordenada Y del punt que actuarà de centre de l'el·lipse.\\
+\textbf{float rx:} Nombre de píxels que especifiquen la longitud del radi horitzontal de l'el·lipse. \\
+\textbf{float ry:} Nombre de píxels que especifiquen la longitud del radi vertical de l'el·lipse.\\
+\textbf{ALLEGRO\_COLOR color:} Estructura ALLEGRO\_COLOR que especifica de quin color serà la figura.\\
+
+\noindent \textbf{Nota:} Aquesta estructura la podem generar mitjançant la crida a la funció \textbf{LS\_allegro\_get\_color( int nColor)}.\\
 
 \end{document}
+	
+
+  
