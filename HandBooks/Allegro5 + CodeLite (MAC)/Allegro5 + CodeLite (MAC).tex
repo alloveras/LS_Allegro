@@ -4,9 +4,10 @@
 \usepackage[utf8]{inputenc}
 \usepackage{graphicx}
 \usepackage{fancyhdr}
-\usepackage{hyperref}
+\usepackage[hidelinks]{hyperref}
 \usepackage{tocloft}
 \usepackage[T1]{fontenc}
+
 
 
 \title{Instal·lació Allegro 5.1 (MAC)}
@@ -112,7 +113,7 @@ En aquest manual s'explicarà com realitzar la instal·lació de l'entorn de des
 Abans de començar amb el procés ens farà falta descarregar el software que instal·larem al MAC. Per fer les coses fàcils, podeu trobar un comprimit amb tot allò que necessiteu al següent enllaç:
 
 \begin{center}
-	\url{http://goo.gl/QvPq1U}
+	\url{http://goo.gl/ulshzG}
 \end{center}
 
 \noindent Un cop completada la descàrrega, descomprimirem els continguts del \textit{.zip} a qualsevol carpeta del nostre ordinador. Al finalitzar la descompressió hauríem d'obtenir una carpeta amb el següents continguts:
@@ -126,6 +127,7 @@ Abans de començar amb el procés ens farà falta descarregar el software que in
 \noindent \textbf{Nota:} És important notar que haureu d'escollir l'instal·lador que porti al nom la versió del sistema operatiu de MAC que estigueu utilitzant al vostre ordinador.
 
 \newpage
+
 \noindent La finestra que s'hauria de mostrar al fer doble click sobre l'instal·lador de \textit{MacPorts} és la següent:
 
 \begin{center}
@@ -160,7 +162,13 @@ libtheora +universal
 	\includegraphics[scale=0.5]{img/Ports_Install_Libs.png}
 \end{center}
 
-\noindent \textbf{Nota:} És normal que al introduir la comanda anterior el programa torni a demanar la clau d'administador. El motiu d'això és que ens disposem a instal·lar nou software a l'ordinador i, per tant, li hem d'indicar que tenim permisos per fer-ho.
+\noindent \textbf{Nota:} És normal que al introduir la comanda anterior el programa torni a demanar la clau d'administador. El motiu d'això és que ens disposem a instal·lar nou software a l'ordinador i, per tant, li hem d'indicar que tenim permisos per fer-ho.\\
+
+\noindent \textbf{Nota:} Pot ser que \textit{ports} necessiti sincronitzar-se abans de realitzar la instal·lació dels paquets. Si això fos necessari, al llançar la comanda anterior se'ns mostraria un missatge d'error de que no es poden trobar els paquets que estem sol·licitant. Per solucionar-ho, n'hi haurà prou amb llançar la següent comanda abans de tornar a intentar la comanda d'instal·lació dels paquets:
+\begin{center}
+	\textbf{sudo port -d selfupdate}
+\end{center}
+
 
 \newpage
 \noindent Caldrà tenir una mica de paciència mentre s'instal·len les dependències ja que n'hi ha unes quantes. Un cop finalitzada la comanda anterior, llançarem la següent a través del mateix terminal tal i com es mostra a la següent imatge:
@@ -263,7 +271,11 @@ Per fer-ho, només cal que fem click al botó \textit{Yes} de la finestra emerge
 
 \noindent \textbf{Nota:} És molt important que no us equivoqueu al seleccionar el compilador, ja que sinó no podreu treballar amb Allegro, ja que la llibreria només s'ha instal·lat pel compilador GCC de la vostre màquina i no pas per la resta de compiladors que poguéssiu tenir instal·lats.\\
 
-\noindent Fet tot això, ja tenim l'entorn de treball preparat. Ara només cal descarregar el projecte base que trobareu a l'eStudy i començar a treballar amb la pràctica.
+\noindent Fet tot això, ja tenim l'entorn de treball preparat. Ara només cal descarregar el projecte base que trobareu a l'eStudy i començar a treballar amb la pràctica. En cas de que no tingueu accés a l'eStudy podeu descarregar el projecte base per a plataformes MAC des del següent enllaç:
+
+\begin{center}
+	\url{http://goo.gl/oCbiEF}
+\end{center}
 
 \end{document}
 
