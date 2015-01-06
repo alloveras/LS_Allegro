@@ -1,0 +1,110 @@
+\documentclass[11pt]{article}
+
+%Afegim els "packages" necessaris per generar el document
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\usepackage{fancyhdr}
+\usepackage{hyperref}
+\usepackage{tocloft}
+\usepackage[T1]{fontenc}
+
+
+\title{Instal·lació Allegro 5 (Linux)}
+\author{Autor: Albert Lloveras Carbonell\\Revisió: Joaquim Porte Rodríguez}
+\date{}
+
+\renewcommand\contentsname{\huge Índex \vspace{8pt} \hrule}
+\renewcommand{\cftsecleader}{\cftdotfill{\cftdotsep}}
+
+%------------------------------------------------------------
+%	Definició de Capçaleres i Peus de Pàgina
+%------------------------------------------------------------
+
+\fancypagestyle{pageStyle}{
+	%Definim la capçalera de l'esquerra (Logo Salle)
+	\fancyhead[L]{
+		\includegraphics[scale=0.25]{img/la_salle_logo.jpg}
+	} 
+
+	%Definim la capçalera de la dreta (Info Curs i Assignatura)
+	\fancyhead[R]{
+		\vtop{
+			Manual d'instal·lació\\
+			d'Allegro 5 (Ubuntu)\\
+		}
+	}
+	\fancyfoot[C]{} %Peu de pàgina central
+	\fancyfoot[L]{Departament d'Enginyeria - Informàtica} %Peu de pàgina esquerra
+	\fancyfoot[R]{\thepage} %Peu de pàgina dreta (Número de pàgina)	
+	%Configuracions extra
+	\renewcommand{\headrulewidth}{0pt} %Ocultem la línia de separació entre 		capçalera i bloc de text
+	\renewcommand{\footrulewidth}{2pt} %Fixem la línia de separació entre peu de pàgina i bloc de text
+	\setlength{\headheight}{67pt} %Fixem la mida de la capçalera	
+	
+}
+
+%Definim la macro (nofooter) per poder amagar el peu de pàgina quan interessi
+\fancypagestyle{nofooter}{
+	\fancyfoot{}
+	\renewcommand{\footrulewidth}{0pt}
+}
+
+%Definim la macro (nofooter) per poder amagar el peu de pàgina quan interessi
+\fancypagestyle{empty}{
+	\fancyfoot{}
+	\fancyhead{}
+	\renewcommand{\footrulewidth}{0pt}
+	\renewcommand{\headrulewidth}{0pt}
+}
+
+\begin{document}
+
+\pagestyle{empty}
+\begin{center}
+
+	%--- Logo de la portada --- %
+	\includegraphics[width=0.15\textwidth]{img/allegro.png}~\\[1cm]
+	
+	%---- Nom del programa --- %
+	\textsc{\LARGE Allegro 5}\\[1.5cm]
+	
+	%-- Nom del manual -- %
+	\hrule
+	\vspace{8pt}
+	\huge{\bfseries Manual d'instal·lació (Ubuntu)}
+	\vspace{8pt}
+	\hrule	
+	\vspace{12pt	}
+
+	% -- Nom de l'autor i del supervisor
+	\noindent
+	\begin{minipage}{0.4\textwidth}
+		\begin{flushleft} \large
+			\emph{Autor:}\\
+			Albert \textsc{Lloveras}
+		\end{flushleft}
+	\end{minipage}%
+	\begin{minipage}{0.4\textwidth}
+		\begin{flushright} \large
+			\emph{Revisió:} \\
+			Joaquim \textsc{Porte}
+		\end{flushright}
+	\end{minipage}
+	\vfill
+
+\end{center}
+
+%---- Índex ---- %
+\newpage
+
+\pagestyle{empty}
+\tableofcontents
+
+
+%---- Començament del document --- %
+\newpage
+\pagestyle{pageStyle}
+
+\section{Section one}
+\section{Section two}
+\end{document}
