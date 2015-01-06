@@ -29,7 +29,7 @@
 
 \title{Documentació LS\_Allegro}
 \author{Departament d'Informàtica (La Salle Barcelona)}
-\date{Darrera Revisió : 27/12/2014}
+\date{Darrera Revisió : 06/01/2015}
 
 \begin{document}
 
@@ -60,7 +60,7 @@ La llibreria Allegro 5 permet generar colors a partir de combinacions RGB mitjan
 
 \noindent Per fer-ho es va definir una paleta de colors estàndard que contingués els colors més habituals. D'aquesta manera, de cara als alumnes de primer, els únics colors disponibles per a les seves creacions serien els de dita paleta i la manera d'accedir-hi seria mitjançant la crida a la funció \textbf{LS\_allegro\_get\_color(CONSTANT\_DE\_COLOR)} que s'explicarà amb més detall al llarg d'aquest document.\\
 
-\noindent A continuació es llisten els colors que es troben dins de la paleta de colors estàndard i que poden ser accedits a través de crides a la funció \textbf{LS\_allegro\_get\_color(CONSTANT\_DE\_COLOR}:
+\noindent A continuació es llisten els colors que es troben dins de la paleta de colors estàndard i que poden ser accedits a través de crides a la funció \textbf{LS\_allegro\_get\_color(CONSTANT\_DE\_COLOR}):
 \begin{center}
 	\begin{tabular}{| l | l |}
 		\hline
@@ -166,7 +166,7 @@ Aquest procediment esborra els continguts de la pantalla de línia de comandes q
 
 \noindent \textbf{Paràmetres:}\\ Cap
 
-\subsubsection{void LS\_allegro\_clear\_and\_paint(ALLEGRO\_COLOR color);}
+\subsubsection{void LS\_allegro\_clear\_and\_paint(int nColor);}
 \textbf{Explicació:}\\
 Per entendre el funcionament d'aquest procediment, s'ha d'explicar com s'ho fa Allegro 5 per mostrar els continguts a través de la finestra gràfica.\\
 
@@ -177,7 +177,7 @@ Per entendre el funcionament d'aquest procediment, s'ha d'explicar com s'ho fa A
 \noindent Un cop explicat això, podem dir que aquest procediment el que fa és intercanviar l'estat de les dues finestres gràfiques i pintar, del color que rep per paràmetre, el fons de la finestra que queda en estat invisible.
 
 \noindent \textbf{Paràmetres:} \\
-\textbf{ALLEGRO\_COLOR color:} Color del qual volem pintar la pantalla. Ha de ser del tipus ALLEGRO\_COLOR, que recordem que es pot generar amb la funció \textbf{ALLEGRO\_COLOR LS\_allegro\_get\_color( int nColor)}.\\
+\textbf{int color:} Color del qual volem pintar la pantalla. Aquest enter ha de ser alguna de les constants que hem citat anteriorment a l'apartat de \textbf{Contants del mòdul} quan parlàvem de les constants de color.
 
 \subsection{Funcions}
 En aquesta secció s'expliquen tots els detalls que fan referència a les rutines del mòdul LS\_Allegro que retornen algun tipus de dada diferent a void que pot ser interessant recollir en alguns dels cassos.
