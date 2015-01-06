@@ -4,7 +4,7 @@
 \usepackage[utf8]{inputenc}
 \usepackage{graphicx}
 \usepackage{fancyhdr}
-\usepackage{hyperref}
+\usepackage[hidelinks]{hyperref}
 \usepackage{tocloft}
 \usepackage[T1]{fontenc}
 
@@ -145,8 +145,10 @@ En aquest manual es donaran les pautes per a la instal·lació de Code-Lite al v
 \noindent En el nostre cas, el nom de la nostre versió d'Ubuntu és \textbf{trusty} però això pot variar en cada ordinador. De totes maneres, si s'està usant una versió d'Ubuntu superior a la 14.04, totes les que apareguin seran vàlides per a la instal·lació de Code-Lite a través d'aquesta guia. \\
 
 \noindent Un cop obtingut el nom de la nostre versió, ens podem disposar a la descàrrega i instal·lació de Code-Lite. Per fer-ho executarem les següents comandes:
-\begin{center}
-	\small{\textbf{sudo apt-key adv --fetch-keys http://repos.codelite.org/CodeLite.asc}}
+\small \begin{center}
+	\begin{verbatim}
+	sudo apt-key adv --fetch-keys http://repos.codelite.org/CodeLite.asc
+	\end{verbatim}
 \end{center}
 
 \begin{center}
@@ -219,7 +221,12 @@ Ara que ja disposem de Code-Lite al nostre ordinador ens disposarem a realitzar 
 
 \noindent En aquesta finestra haurem de seleccionar el compilador que voldrem que CodeLite utilitzi alhora de compilar els nostres projectes. Haurem de seleccionar el \textbf{GCC} i en cas de que estigui disponible, la opció que diu \textbf{GCC (4.8)} tot i que tampoc és indispensable tenir la última versió del compilador però sí molt recomanable. \\
 
-\noindent Un cop fet això, ens trobarem a la finestra inicial de Code-Lite i estarem preparats per començar a crear i desenvolupar els nostres projectes de programació en C/C++.
+\noindent Un cop fet això, ens trobarem a la finestra inicial de Code-Lite i estarem preparats per començar a crear i desenvolupar els nostres projectes de programació en C/C++.\\
+
+\noindent A continuació, us deixem un enllaç al projecte base que podeu fer servir per desenvolupar la pràctica 2 de l'assignatura Programació I. Aquest projecte inclou totes les configuracions que necessiteu així com els fitxers del mòdul LS\_Allegro. Podeu aconseguir-lo tot seguint el següent enllaç:
+\begin{center}
+	\url{http://goo.gl/ct3Y42}
+\end{center}
 
 
 \end{document}
